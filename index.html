@@ -98,19 +98,250 @@
   </div>
 
   <!-- CONTENIDO REAL (puedes cambiarlo o dejarlo vacío) -->
-  <h1>Bienvenido a TEAM JXLL</h1>
-  <p>El sistema ha cargado correctamente.</p>
+ <!DOCTYPE html>
+ <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TEAM JXLL</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        body {
+            font-family: 'Courier New', monospace;
+            background: linear-gradient(45deg, #000000, #1a0000, #000000);
+            color: #ff0000;
+            min-height: 100vh;
+            overflow-x: hidden;
+        }
+        .nav-bar {
+            background: rgba(0,0,0,0.95);
+            padding: 15px 0;
+            position: fixed;
+            top: 0;
+            width: 100%;
+            z-index: 1000;
+            border-bottom: 3px solid #ff0000;
+            box-shadow: 0 0 30px rgba(255,0,0,0.5);
+        }
+        .nav-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: center;
+            gap: 30px;
+        }
+        .nav-btn {
+            background: transparent;
+            color: #ff0000;
+            border: 2px solid #ff0000;
+            padding: 12px 30px;
+            font-size: 1.1em;
+            font-weight: bold;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            position: relative;
+            overflow: hidden;
+        }
+        .nav-btn:hover {
+            background: #ff0000;
+            color: #000;
+            box-shadow: 0 0 25px #ff0000;
+            transform: translateY(-3px);
+        }
+        .nav-btn::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.3), transparent);
+            transition: left 0.5s;
+        }
+        .nav-btn:hover::before {
+            left: 100%;
+        }
+        .container {
+            max-width: 1000px;
+            margin: 120px auto 0;
+            padding: 40px 20px;
+            text-align: center;
+        }
+        h1 {
+            font-size: 4em;
+            text-transform: uppercase;
+            letter-spacing: 12px;
+            margin-bottom: 30px;
+            animation: pulse 2s infinite;
+            text-shadow: 0 0 40px #ff0000;
+        }
+        @keyframes pulse {
+            0%, 100% { 
+                opacity: 1; 
+                transform: scale(1);
+            }
+            50% { 
+                opacity: 0.8; 
+                transform: scale(1.05);
+            }
+        }
+        .mission-section {
+            background: rgba(255,0,0,0.08);
+            border: 3px solid #ff0000;
+            padding: 60px 50px;
+            border-radius: 15px;
+            box-shadow: 0 0 50px rgba(255,0,0,0.4);
+            margin: 80px 0;
+        }
+        .mission-section h2 {
+            font-size: 2.8em;
+            margin-bottom: 35px;
+            border-bottom: 4px solid #ff0000;
+            padding-bottom: 20px;
+            display: inline-block;
+            letter-spacing: 4px;
+        }
+        .mission-text {
+            font-size: 1.4em;
+            line-height: 1.9;
+            max-width: 900px;
+            margin: 0 auto;
+        }
+        .services-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 30px;
+            margin-top: 50px;
+            max-width: 1000px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+        .service-card {
+            background: rgba(0,0,0,0.7);
+            border: 2px solid #ff0000;
+            padding: 30px;
+            border-radius: 12px;
+            transition: all 0.4s ease;
+            position: relative;
+        }
+        .service-card:hover {
+            transform: translateY(-12px);
+            box-shadow: 0 20px 50px rgba(255,0,0,0.5);
+            border-color: #ff6666;
+        }
+        .service-card h3 {
+            font-size: 1.5em;
+            margin-bottom: 15px;
+            color: #ff6666;
+        }
+        .bottom-buttons {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 30px;
+            justify-content: center;
+            margin: 100px 0 60px;
+        }
+        .custom-btn {
+            background: transparent;
+            color: #ff0000;
+            border: 3px solid #ff0000;
+            padding: 20px 45px;
+            font-size: 1.4em;
+            font-weight: bold;
+            text-transform: uppercase;
+            letter-spacing: 3px;
+            cursor: pointer;
+            transition: all 0.4s ease;
+            text-decoration: none;
+            border-radius: 12px;
+            position: relative;
+            min-width: 280px;
+            text-align: center;
+        }
+        .custom-btn:hover {
+            background: #ff0000;
+            color: #000;
+            box-shadow: 0 12px 45px rgba(255,0,0,0.7);
+            transform: translateY(-10px);
+        }
+        .custom-btn.aliases { border-color: #ff4444; }
+        .custom-btn.aliases:hover { background: #ff4444; }
+        .custom-btn.insects { border-color: #cc0000; }
+        .custom-btn.insects:hover { background: #cc0000; }
+        footer {
+            text-align: center;
+            padding: 50px;
+            border-top: 3px solid #ff0000;
+            opacity: 0.85;
+            font-size: 1.1em;
+            margin-top: 40px;
+        }
+        @media (max-width: 768px) {
+            h1 { font-size: 2.8em; letter-spacing: 6px; }
+            .mission-section { padding: 40px 25px; margin: 60px 20px; }
+            .mission-text { font-size: 1.2em; }
+            .mission-section h2 { font-size: 2.2em; }
+            .bottom-buttons { flex-direction: column; align-items: center; }
+            .custom-btn { min-width: 100%; max-width: 350px; }
+        }
+    </style>
+<body>
+    <nav class="nav-bar">
+        <div class="nav-container">
+            <a href="aliados.html" class="nav-btn" target="_blank">🔗 ALIADOS</a>
+            <a href="insectos.html" class="nav-btn" target="_blank">🐛 INSECTOS</a>
+        </div>
+    </nav>
 
-  <script>
-    window.addEventListener("load", () => {
-      const loader = document.getElementById("loader");
-      loader.classList.add("fade-out");
+    <div class="container">
+        <h1>TEAM JXLL</h1>
+        <p style="font-size: 1.6em; margin-bottom: 10px; opacity: 0.9; letter-spacing: 2px;">Professional hacking community</p>
 
-      setTimeout(() => {
-        loader.style.display = "none";
-      }, 600);
-    });
-  </script>
+        <div class="mission-section">
+            <h2>🔥 Nuestra Misión</h2>
+            <div class="mission-text">
+                <strong>TEAM JXLL</strong>  opera como una célula independiente dedicada a rastrear, exponer y neutralizar amenazas dentro del entorno digital.
+Nuestra misión es desmantelar redes de engaño, abuso y manipulación que operan en las sombras del ciberespacio.
+Con el apoyo de nuestros aliados y nuestras herramientas internas, actuamos de manera precisa, silenciosa y estratégica para mantener la red limpia, segura y fuera del alcance de quienes buscan aprovecharse de otros.
+No trabajamos por reconocimiento. No buscamos atención.
+Ejecutamos. Observamos. Protegemos.
+TEAM JXLL mantiene el equilibrio donde otros fallan.
+            </div>
+            
+            <div class="services-grid">
+                <div class="service-card">
+                    <h3>🎯 Reconocimiento</h3>
+                    <p>OSINT avanzado | Mapeo de ASN | Recolección de inteligencia pasiva | Enumeración de subdominios</p>
+                </div>
+                <div class="service-card">
+                    <h3>💥 Explotación</h3>
+                    <p>Exploits personalizados | Desarrollo de zero-day | PoCs armados | Ataques en cadena</p>
+                </div>
+                <div class="service-card">
+                    <h3>🖥️ Infraestructura C2</h3>
+                    <p>Despliegue de balizas | Técnicas de evasión | Módulos de persistencia | Movimiento lateral</p>
+                </div>
+                <div class="service-card">
+                    <h3>📤 Post-Exploitation</h3>
+                    <p>Escalamiento de privilegios | Ataques DCSync | Recolección de credenciales | Exfiltración de datos</p>
+                </div>
+            </div>
+        </div>
 
+        <div class="bottom-buttons">
+         <a href="https://t.me/+icjkLL6rtKcxNzRh" class="custom-btn" onclick="alert('🔧 Edita el href para tu link personalizado')">🔗 Canal</a>
+            <a href="https://t.me/team_jxll_chat" class="custom-btn" onclick="alert('🔧 Edita el href para tu link personalizado')">🔗 Grupo</a>
+        </div>
+    </div>
+
+    <footer>
+        <p>🩸 <strong>JXLL Red Team Elite</strong> | Plataforma Autorizada | 2026</p>
+      
+    </footer>
 </body>
 </html>
