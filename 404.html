@@ -19,11 +19,14 @@
     text-align: center;
   }
 
-  /* Logo girando */
+  /* Logo girando sin moverse */
   .logo {
     width: 150px;
+    height: 150px;
+    object-fit: contain;
     animation: spin 2s linear infinite;
     margin-bottom: 30px;
+    transform-origin: center center; /* asegura que gire sin desplazarse */
   }
 
   @keyframes spin {
@@ -38,26 +41,29 @@
     text-shadow: 0 0 20px red;
   }
 
-  /* Texto inferior */
+  /* Texto editable */
   p {
     font-size: 1.8rem;
     margin-top: 20px;
     color: #ff4444;
     text-shadow: 0 0 10px red;
+    max-width: 800px;
   }
 </style>
 
 </head>
 <body>
 
-  <!-- Logo girando -->
+  <!-- Logo girando sin moverse -->
   <img src="favicon.png" class="logo">
 
   <!-- Texto 404 -->
   <h1>404</h1>
 
-  <!-- Mensaje -->
-  <p>No busques lo que no se te ha perdido</p>
+  <!-- MENSAJE EDITABLE -->
+  <p>
+    Que mierda estas buscando aqui eres idiota o que, deja de buscar atencion y devuelvete a tu patetica y insignificante vida
+  </p>
 
 </body>
 </html>
