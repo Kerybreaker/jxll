@@ -1,1 +1,181 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<title>ALIADOS - TEAM JXLL</title>
 
+<style>
+  body {
+    margin: 0;
+    padding: 0;
+    background: #050505;
+    color: #f5f5f5;
+    font-family: monospace;
+  }
+
+  .wrapper {
+    max-width: 900px;
+    margin: 40px auto;
+    padding: 0 15px;
+  }
+
+  .title {
+    font-size: 1.9rem;
+    color: #ff3333;
+    text-align: left;
+    margin-bottom: 5px;
+  }
+
+  .subtitle {
+    font-size: 0.85rem;
+    color: #888;
+    text-align: left;
+    margin-bottom: 25px;
+    letter-spacing: 1px;
+  }
+
+  /* GRID TIPO DIRECTORIO */
+  .ally-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+    gap: 15px;
+  }
+
+  /* TARJETA ESTILO DIRECTORIO */
+  .ally-card {
+    background: #0b0b0b;
+    border: 1px solid #222;
+    padding: 10px 12px;
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+  }
+
+  .ally-top {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+
+  .ally-img {
+    width: 40px;
+    height: 40px;
+    object-fit: cover;
+    border-radius: 4px;
+    border: 1px solid #ff3333;
+  }
+
+  .ally-name {
+    font-size: 0.95rem;
+    color: #ff3333;
+  }
+
+  .ally-desc {
+    font-size: 0.8rem;
+    color: #c0c0c0;
+    line-height: 1.2rem;
+  }
+
+  .ally-bottom {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: 4px;
+  }
+
+  .ally-tag {
+    font-size: 0.7rem;
+    padding: 2px 6px;
+    border-radius: 3px;
+    border: 1px solid #ff3333;
+    color: #ff6666;
+  }
+
+  .ally-btn {
+    font-size: 0.7rem;
+    padding: 3px 8px;
+    border-radius: 3px;
+    border: 1px solid #ff3333;
+    background: transparent;
+    color: #ff6666;
+    cursor: pointer;
+  }
+
+  .ally-btn:hover {
+    background: #ff3333;
+    color: #000;
+  }
+
+  .back {
+    margin-top: 25px;
+    font-size: 0.8rem;
+    color: #777;
+    text-align: left;
+  }
+
+  .back a {
+    color: #ff3333;
+    text-decoration: none;
+    border-bottom: 1px solid #ff3333;
+    font-size: 0.8rem;
+  }
+</style>
+
+</head>
+<body>
+
+  <div class="wrapper">
+    <div class="title"> ALIADOS</div>
+    <div class="subtitle">Nodos verificados y enlaces autorizados de TEAM JXLL.</div>
+
+    <div class="ally-grid">
+
+      <!-- ====== TARJETA (COPIA Y PEGA PARA MÁS) ====== -->
+      <div class="ally-card">
+        <div class="ally-top">
+          <img src="https://files.catbox.moe/gl13uo.jpg" class="ally-img">
+          <div class="ally-name">FLOODHACKING</div>
+        </div>
+
+        <div class="ally-desc">
+          Limpieza de Grupos, Canales, Usuarios De Telegram
+        </div>
+
+        <div class="ally-bottom">
+          <div class="ally-tag">Limpieza</div>
+          <button class="ally-btn" onclick="https://t.me/FloodHackingChannel">
+            
+            VISITAR
+          </button>
+        </div>
+      </div>
+          <div class="ally-card">
+        <div class="ally-top">
+          <img src="https://files.catbox.moe/knlxdm.jpg" class="ally-img">
+          <div class="ally-name">HACKPURGARTORY</div>
+        </div>
+
+        <div class="ally-desc">
+          Limpieza de Grupos, Canales, Usuarios De Telegram
+        </div>
+
+        <div class="ally-bottom">
+          <div class="ally-tag">Limpieza</div>
+          <button class="ally-btn" onclick="https://HackPurgatory.org">
+            
+            VISITAR
+          </button>
+        </div>
+      </div>
+            
+      <!-- ============================================= -->
+
+    </div>
+
+    <div class="back">
+      <a href="../index.html">← Volver al panel principal</a>
+    </div>
+  </div>
+
+</body>
+</html>
