@@ -2,38 +2,62 @@
 <html lang="es">
 <head>
 <meta charset="UTF-8">
-<title>404</title>
+<title>404 - TEAM JXLL</title>
+
 <style>
-    body {
-        margin: 0;
-        padding: 0;
-        background: #000;
-        color: #ff0000;
-        font-family: 'Courier New', monospace;
-        display: flex;
-        flex-direction: column;
-        justify-content: center;
-        align-items: center;
-        height: 100vh;
-        text-align: center;
-    }
+  body {
+    margin: 0;
+    padding: 0;
+    background: black;
+    color: red;
+    font-family: monospace;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    text-align: center;
+  }
 
-    h1 {
-        font-size: 10rem;
-        margin: 0;
-        text-shadow: 0 0 20px red;
-    }
+  /* Logo girando */
+  .logo {
+    width: 150px;
+    animation: spin 2s linear infinite;
+    margin-bottom: 30px;
+  }
 
-    p {
-        font-size: 2rem;
-        margin-top: 20px;
-        color: #ff4444;
-        text-shadow: 0 0 10px red;
-    }
+  @keyframes spin {
+    from { transform: rotate(0deg); }
+    to { transform: rotate(360deg); }
+  }
+
+  /* Texto 404 */
+  h1 {
+    font-size: 8rem;
+    margin: 0;
+    text-shadow: 0 0 20px red;
+  }
+
+  /* Texto inferior */
+  p {
+    font-size: 1.8rem;
+    margin-top: 20px;
+    color: #ff4444;
+    text-shadow: 0 0 10px red;
+  }
 </style>
+
 </head>
 <body>
-    <h1>404</h1>
-    <p>¿Qué buscas perrita? Aquí no hay nada de tu interés</p>
+
+  <!-- Logo girando -->
+  <img src="favicon.png" class="logo">
+
+  <!-- Texto 404 -->
+  <h1>404</h1>
+
+  <!-- Mensaje -->
+  <p>No busques lo que no se te ha perdido</p>
+
 </body>
 </html>
