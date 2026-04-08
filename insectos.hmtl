@@ -1,1 +1,21 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+   <link rel="icon" type="image/png" href="favicon.png">
+<link rel="shortcut icon" href="favicon.png" type="image/x-icon">
+<link rel="apple-touch-icon" href="favicon.png">
 
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+   <script>
+    document.addEventListener("keydown", function(e) {
+      if (e.ctrlKey && e.key.toLowerCase() === "u") {
+        e.preventDefault();
+        window.location.href = "https://t.me/zconchita"; 
+      }
+    });
+  </script>
+</body>
+</head>
+<body>
+  <h1>Bienvenido a TEAM JXLL</h1>
