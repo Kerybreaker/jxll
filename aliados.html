@@ -2,6 +2,7 @@
 <html lang="es">
 <head>
 <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>ALIADOS - TEAM JXLL</title>
 
 <style>
@@ -20,32 +21,29 @@
   }
 
   .title {
-    font-size: 1.9rem;
+    font-size: 1.8rem;
     color: #ff3333;
-    text-align: left;
     margin-bottom: 5px;
   }
 
   .subtitle {
     font-size: 0.85rem;
     color: #888;
-    text-align: left;
     margin-bottom: 25px;
-    letter-spacing: 1px;
   }
 
-  /* GRID TIPO DIRECTORIO */
+  /* GRID RESPONSIVE */
   .ally-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+    grid-template-columns: repeat(auto-fit, minmax(230px, 1fr));
     gap: 15px;
   }
 
-  /* TARJETA ESTILO DIRECTORIO */
+  /* TARJETA */
   .ally-card {
     background: #0b0b0b;
     border: 1px solid #222;
-    padding: 10px 12px;
+    padding: 12px;
     display: flex;
     flex-direction: column;
     gap: 6px;
@@ -58,20 +56,20 @@
   }
 
   .ally-img {
-    width: 40px;
-    height: 40px;
+    width: 42px;
+    height: 42px;
     object-fit: cover;
     border-radius: 4px;
     border: 1px solid #ff3333;
   }
 
   .ally-name {
-    font-size: 0.95rem;
+    font-size: 1rem;
     color: #ff3333;
   }
 
   .ally-desc {
-    font-size: 0.8rem;
+    font-size: 0.82rem;
     color: #c0c0c0;
     line-height: 1.2rem;
   }
@@ -80,7 +78,6 @@
     display: flex;
     justify-content: space-between;
     align-items: center;
-    margin-top: 4px;
   }
 
   .ally-tag {
@@ -106,18 +103,45 @@
     color: #000;
   }
 
+  /* AJUSTES PARA CELULAR */
+  @media (max-width: 480px) {
+
+    .title {
+      font-size: 1.4rem;
+    }
+
+    .ally-grid {
+      grid-template-columns: 1fr; /* UNA tarjeta por fila */
+    }
+
+    .ally-img {
+      width: 36px;
+      height: 36px;
+    }
+
+    .ally-name {
+      font-size: 0.9rem;
+    }
+
+    .ally-desc {
+      font-size: 0.75rem;
+    }
+
+    .ally-btn {
+      font-size: 0.65rem;
+      padding: 3px 6px;
+    }
+  }
+
   .back {
     margin-top: 25px;
-    font-size: 0.8rem;
-    color: #777;
-    text-align: left;
   }
 
   .back a {
     color: #ff3333;
     text-decoration: none;
     border-bottom: 1px solid #ff3333;
-    font-size: 0.8rem;
+    font-size: 0.85rem;
   }
 </style>
 
@@ -125,49 +149,50 @@
 <body>
 
   <div class="wrapper">
-    <div class="title"> ALIADOS</div>
+    <div class="title">ALIADOS - TEAM JXLL</div>
     <div class="subtitle">Nodos verificados y enlaces autorizados de TEAM JXLL.</div>
 
     <div class="ally-grid">
 
       <!-- ====== TARJETA (COPIA Y PEGA PARA MÁS) ====== -->
-      <div class="ally-card">
-        <div class="ally-top">
-          <img src="https://files.catbox.moe/gl13uo.jpg" class="ally-img">
-          <div class="ally-name">FLOODHACKING</div>
-        </div>
+     <!-- FLOODHACKING -->
+<div class="ally-card">
+  <div class="ally-top">
+    <img src="https://files.catbox.moe/gl13uo.jpg" class="ally-img">
+    <div class="ally-name">FLOODHACKING</div>
+  </div>
 
-        <div class="ally-desc">
-          Limpieza de Grupos, Canales, Usuarios De Telegram
-        </div>
+  <div class="ally-desc">
+    Limpieza de Grupos, Canales, Usuarios De Telegram
+  </div>
 
-        <div class="ally-bottom">
-          <div class="ally-tag">Limpieza</div>
-          <button class="ally-btn" onclick="https://t.me/FloodHackingChannel">
-            
-            VISITAR
-          </button>
-        </div>
-      </div>
-          <div class="ally-card">
-        <div class="ally-top">
-          <img src="https://files.catbox.moe/knlxdm.jpg" class="ally-img">
-          <div class="ally-name">HACKPURGARTORY</div>
-        </div>
+  <div class="ally-bottom">
+    <div class="ally-tag">Limpieza</div>
+    <button class="ally-btn" onclick="location.href='https://t.me/FloodHackingChannel'">
+      VISITAR
+    </button>
+  </div>
+</div>
 
-        <div class="ally-desc">
-          Limpieza de Grupos, Canales, Usuarios De Telegram
-        </div>
+<!-- HACKPURGATORY -->
+<div class="ally-card">
+  <div class="ally-top">
+    <img src="https://files.catbox.moe/knlxdm.jpg" class="ally-img">
+    <div class="ally-name">HACKPURGATORY</div>
+  </div>
 
-        <div class="ally-bottom">
-          <div class="ally-tag">Limpieza</div>
-          <button class="ally-btn" onclick="https://HackPurgatory.org">
-            
-            VISITAR
-          </button>
-        </div>
-      </div>
-            
+  <div class="ally-desc">
+    Limpieza de Grupos, Canales, Usuarios De Telegram
+  </div>
+
+  <div class="ally-bottom">
+    <div class="ally-tag">Limpieza</div>
+    <button class="ally-btn" onclick="location.href='https://HackPurgatory.org'">
+      VISITAR
+    </button>
+  </div>
+</div>
+
       <!-- ============================================= -->
 
     </div>
