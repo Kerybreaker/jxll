@@ -371,10 +371,9 @@
                        oninput="filterExpedientes(this.value)">
             </div>
         </header>
-
-        <div class="expedientes-grid" id="expedientesGrid">
+   <div class="expedientes-grid" id="expedientesGrid">
             <!-- EXPEDIENTE 1 -->
-            <div class="expediente-card" onclick="openFolder('LOMH870317HGTPRC05.html')">
+            <button class="access-btn" onclick="event.stopPropagation(); openFolder('LOMH870317HGTPRC05.html')">
                 <div class="status-indicator"></div>
                 <div class="card-id">#LOMH870317HGTPRC05</div>
                 <div class="card-name">HÉCTOR AGUSTÍN LÓPEZ MÁRTINEZ</div>
