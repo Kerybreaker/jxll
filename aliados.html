@@ -1,232 +1,416 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-   <link rel="icon" type="image/png" href="favicon.png">
-<link rel="shortcut icon" href="favicon.png" type="image/x-icon">
-<link rel="apple-touch-icon" href="favicon.png">
-
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-   <script>
-    document.addEventListener("keydown", function(e) {
-      if (e.ctrlKey && e.key.toLowerCase() === "u") {
-        e.preventDefault();
-        window.location.href = "https://t.me/zconchita"; 
-      }
-    });
-  </script>
-</body>
-</head>
-<body>
-  <h1></h1>
-
-  <script>
-    document.addEventListener("keydown", function(e) {
-      if (e.ctrlKey && e.key.toLowerCase() === "u") {
-        e.preventDefault();
-        alert("APOCO SI TILIN");
-      }
-    });
-  </script>
-</body>
 <title>ALIADOS - TEAM JXLL</title>
-
+<link rel="icon" type="image/png" href="favicon.png">
 <style>
-  body {
-    margin: 0;
-    padding: 0;
-    background: #050505;
-    color: #f5f5f5;
-    font-family: monospace;
-  }
+@import url('https://fonts.googleapis.com/css2?family=Share+Tech+Mono&display=swap');
 
-  .wrapper {
-    max-width: 900px;
-    margin: 40px auto;
-    padding: 0 15px;
-  }
+*{margin:0;padding:0;box-sizing:border-box;}
 
-  .title {
-    font-size: 1.8rem;
-    color: #ff3333;
-    margin-bottom: 5px;
-  }
+:root{
+  --red:#8B0000;
+  --red-neon:#FF0000;
+  --smoke:#2C2C2C;
+  --offwhite:#E0E0E0;
+}
 
-  .subtitle {
-    font-size: 0.85rem;
-    color: #888;
-    margin-bottom: 25px;
-  }
+html,body{
+  background:#000;
+  color:var(--offwhite);
+  font-family:'Share Tech Mono','Courier New',monospace;
+  min-height:100vh;
+  overflow-x:hidden;
+}
 
-  /* GRID RESPONSIVE */
-  .ally-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(230px, 1fr));
-    gap: 15px;
-  }
+/* MATRIX */
+#matrix-bg{
+  position:fixed;top:0;left:0;width:100%;height:100%;
+  z-index:0;opacity:0.13;pointer-events:none;
+}
 
-  /* TARJETA */
-  .ally-card {
-    background: #0b0b0b;
-    border: 1px solid #222;
-    padding: 12px;
-    display: flex;
-    flex-direction: column;
-    gap: 6px;
-  }
+/* SCANLINES */
+body::after{
+  content:'';
+  position:fixed;top:0;left:0;width:100%;height:100%;
+  background:repeating-linear-gradient(
+    to bottom,
+    transparent 0px,transparent 3px,
+    rgba(0,0,0,0.18) 3px,rgba(0,0,0,0.18) 4px
+  );
+  pointer-events:none;z-index:999;
+}
 
-  .ally-top {
-    display: flex;
-    align-items: center;
-    gap: 8px;
-  }
+/* ── LOADER ── */
+#loader{
+  position:fixed;inset:0;background:#000;z-index:9999;
+  display:flex;flex-direction:column;align-items:center;justify-content:center;gap:20px;
+  transition:opacity 0.8s ease;
+}
+#loader.hide{opacity:0;pointer-events:none;}
 
-  .ally-img {
-    width: 42px;
-    height: 42px;
-    object-fit: cover;
-    border-radius: 4px;
-    border: 1px solid #ff3333;
-  }
+.loader-ring{
+  width:70px;height:70px;border-radius:50%;
+  border:2px solid #1a0000;
+  border-top:2px solid #FF0000;
+  border-right:2px solid #8B0000;
+  animation:spin 1s linear infinite;
+  box-shadow:0 0 20px rgba(255,0,0,0.3);
+  position:relative;
+}
+.loader-ring::after{
+  content:'✦';
+  position:absolute;inset:0;
+  display:flex;align-items:center;justify-content:center;
+  color:#FF0000;font-size:1.4em;
+  animation:spinRev 1s linear infinite;
+  text-shadow:0 0 8px #ff0000;
+}
+@keyframes spin{to{transform:rotate(360deg);}}
+@keyframes spinRev{to{transform:rotate(-360deg);}}
 
-  .ally-name {
-    font-size: 1rem;
-    color: #ff3333;
-  }
+.boot-lines{
+  width:320px;font-size:11px;color:#8B0000;line-height:2;
+  border:1px solid #8B0000;padding:12px 16px;
+  box-shadow:0 0 18px rgba(139,0,0,0.3);
+}
+.boot-line{opacity:0;animation:bootAppear 0.4s forwards;}
+.boot-line:nth-child(1){animation-delay:0.2s;}
+.boot-line:nth-child(2){animation-delay:0.7s;}
+.boot-line:nth-child(3){animation-delay:1.2s;}
+.boot-line:nth-child(4){animation-delay:1.6s;color:#FF0000;}
 
-  .ally-desc {
-    font-size: 0.82rem;
-    color: #c0c0c0;
-    line-height: 1.2rem;
-  }
+.progress-bar{width:320px;height:3px;background:#1a0000;border:1px solid #8B0000;overflow:hidden;}
+.progress-fill{
+  height:100%;width:0%;
+  background:linear-gradient(90deg,#8B0000,#FF0000);
+  animation:loadFill 2.4s ease-out forwards;
+  box-shadow:0 0 6px #ff0000;
+}
 
-  .ally-bottom {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-  }
+@keyframes bootAppear{to{opacity:1;}}
+@keyframes loadFill{to{width:100%;}}
+@keyframes pulseRed{0%,100%{opacity:1;transform:scale(1);}50%{opacity:0.7;transform:scale(1.05);}}
 
-  .ally-tag {
-    font-size: 0.7rem;
-    padding: 2px 6px;
-    border-radius: 3px;
-    border: 1px solid #ff3333;
-    color: #ff6666;
-  }
+/* NAVBAR */
+.navbar{
+  position:fixed;top:0;width:100%;z-index:100;
+  background:rgba(0,0,0,0.96);
+  border-bottom:1px solid #8B0000;
+  box-shadow:0 0 20px rgba(139,0,0,0.5);
+  padding:10px 0;
+}
+.nav-inner{
+  max-width:1000px;margin:0 auto;
+  display:flex;justify-content:space-between;align-items:center;
+  padding:0 20px;
+}
+.nav-logo{
+  color:#FF0000;font-size:1em;letter-spacing:4px;
+  text-shadow:0 0 10px #ff0000;
+  animation:pulseRed 2s ease-in-out infinite;
+  text-decoration:none;
+}
+.nav-links{display:flex;gap:10px;}
+.nav-link{
+  color:#8B0000;border:1px solid #3a0000;padding:5px 12px;
+  font-size:0.75em;letter-spacing:2px;text-transform:uppercase;
+  text-decoration:none;transition:all 0.3s;font-family:inherit;
+}
+.nav-link:hover{
+  color:#FF0000;border-color:#FF0000;
+  box-shadow:0 0 10px rgba(255,0,0,0.35);
+}
 
-  .ally-btn {
-    font-size: 0.7rem;
-    padding: 3px 8px;
-    border-radius: 3px;
-    border: 1px solid #ff3333;
-    background: transparent;
-    color: #ff6666;
-    cursor: pointer;
-  }
+/* MAIN */
+.main{
+  position:relative;z-index:1;
+  max-width:1000px;margin:0 auto;
+  padding:90px 20px 40px;
+}
 
-  .ally-btn:hover {
-    background: #ff3333;
-    color: #000;
-  }
+/* HERO */
+.page-header{margin-bottom:30px;}
+.page-title{
+  font-size:clamp(1.6em,4vw,2.4em);
+  letter-spacing:8px;text-transform:uppercase;
+  color:#FF0000;
+  text-shadow:0 0 20px #ff0000,0 0 40px rgba(255,0,0,0.25);
+  animation:glitch 5s infinite;
+}
+.page-sub{
+  font-size:0.78em;letter-spacing:3px;color:#8B0000;margin-top:6px;
+}
+.page-divider{
+  width:160px;height:1px;margin:14px 0;
+  background:linear-gradient(90deg,#FF0000,transparent);
+  box-shadow:0 0 6px #ff0000;
+}
 
-  /* AJUSTES PARA CELULAR */
-  @media (max-width: 480px) {
+@keyframes glitch{
+  0%,88%,100%{text-shadow:0 0 20px #ff0000,0 0 40px rgba(255,0,0,0.25);}
+  89%{text-shadow:-2px 0 #ff0000,2px 0 #8B0000;}
+  90%{text-shadow:2px 0 #ff0000,-2px 0 #8B0000;}
+  91%{text-shadow:0 0 20px #ff0000;}
+  92%{text-shadow:-3px 0 #cc0000,3px 0 #ff0000;}
+  93%{text-shadow:0 0 20px #ff0000,0 0 40px rgba(255,0,0,0.25);}
+}
 
-    .title {
-      font-size: 1.4rem;
-    }
+/* ALLY GRID */
+.ally-grid{
+  display:grid;
+  grid-template-columns:repeat(auto-fill,minmax(270px,1fr));
+  gap:18px;
+}
 
-    .ally-grid {
-      grid-template-columns: 1fr; /* UNA tarjeta por fila */
-    }
+/* ALLY CARD */
+.ally-card{
+  background:#060000;
+  border:1px solid #2a0000;
+  position:relative;overflow:hidden;
+  transition:all 0.4s;
+  animation:fadeInCard 0.6s ease both;
+}
+.ally-card:nth-child(1){animation-delay:0.1s;}
+.ally-card:nth-child(2){animation-delay:0.2s;}
+.ally-card:nth-child(3){animation-delay:0.3s;}
+.ally-card:nth-child(4){animation-delay:0.4s;}
 
-    .ally-img {
-      width: 36px;
-      height: 36px;
-    }
+@keyframes fadeInCard{
+  from{opacity:0;transform:translateY(20px);}
+  to{opacity:1;transform:translateY(0);}
+}
 
-    .ally-name {
-      font-size: 0.9rem;
-    }
+/* top accent line */
+.ally-card::before{
+  content:'';position:absolute;top:0;left:0;right:0;height:1px;
+  background:linear-gradient(90deg,transparent,#8B0000,transparent);
+  transition:all 0.4s;
+}
+.ally-card:hover::before{
+  background:linear-gradient(90deg,transparent,#FF0000,transparent);
+  box-shadow:0 0 8px #ff0000;
+}
+/* left accent bar */
+.ally-card::after{
+  content:'';position:absolute;top:0;left:0;bottom:0;width:2px;
+  background:#1a0000;transition:all 0.4s;
+}
+.ally-card:hover::after{
+  background:#FF0000;
+  box-shadow:0 0 10px rgba(255,0,0,0.6);
+}
 
-    .ally-desc {
-      font-size: 0.75rem;
-    }
+.ally-card:hover{
+  border-color:#FF0000;
+  box-shadow:0 0 25px rgba(255,0,0,0.2),inset 0 0 20px rgba(139,0,0,0.05);
+  transform:translateY(-5px);
+}
 
-    .ally-btn {
-      font-size: 0.65rem;
-      padding: 3px 6px;
-    }
-  }
+/* CARD IMAGE BANNER */
+.ally-banner{
+  width:100%;height:120px;object-fit:cover;
+  display:block;filter:grayscale(30%) brightness(0.7);
+  transition:filter 0.4s;
+  border-bottom:1px solid #2a0000;
+}
+.ally-card:hover .ally-banner{filter:grayscale(0%) brightness(0.85);}
 
-  .back {
-    margin-top: 25px;
-  }
+/* CARD BODY */
+.ally-body{padding:14px 14px 12px 16px;}
 
-  .back a {
-    color: #ff3333;
-    text-decoration: none;
-    border-bottom: 1px solid #ff3333;
-    font-size: 0.85rem;
-  }
+.ally-top{display:flex;align-items:center;gap:10px;margin-bottom:10px;}
+.ally-avatar{
+  width:40px;height:40px;object-fit:cover;
+  border-radius:4px;border:1px solid #8B0000;
+  flex-shrink:0;filter:brightness(0.85);
+  transition:all 0.3s;
+}
+.ally-card:hover .ally-avatar{border-color:#FF0000;filter:brightness(1);}
+
+.ally-name{
+  font-size:0.95em;letter-spacing:2px;
+  color:#FF0000;text-transform:uppercase;
+}
+.ally-url{font-size:0.65em;color:#555;letter-spacing:1px;margin-top:2px;}
+
+.ally-desc{
+  font-size:0.76em;color:#888;line-height:1.7;
+  margin-bottom:12px;
+}
+
+.ally-bottom{
+  display:flex;justify-content:space-between;align-items:center;
+}
+.ally-tag{
+  font-size:0.65em;padding:2px 8px;
+  border:1px solid #3a0000;color:#8B0000;
+  letter-spacing:1px;
+}
+.ally-btn{
+  font-size:0.7em;padding:4px 12px;
+  border:1px solid #FF0000;
+  background:transparent;color:#FF0000;
+  cursor:pointer;font-family:inherit;
+  letter-spacing:2px;text-transform:uppercase;
+  transition:all 0.3s;
+}
+.ally-btn:hover{background:#FF0000;color:#000;box-shadow:0 0 12px rgba(255,0,0,0.5);}
+
+/* BACK */
+.back-link{
+  margin-top:30px;display:inline-block;
+  color:#8B0000;border-bottom:1px solid #3a0000;
+  text-decoration:none;font-size:0.8em;letter-spacing:2px;
+  transition:all 0.3s;
+}
+.back-link:hover{color:#FF0000;border-color:#FF0000;}
+
+/* FOOTER */
+footer{
+  border-top:1px solid #1a0000;padding:20px;
+  text-align:center;font-size:0.7em;color:#3a0000;
+  letter-spacing:2px;position:relative;z-index:1;
+}
+
+@media(max-width:600px){
+  .ally-grid{grid-template-columns:1fr;}
+  .ally-banner{height:100px;}
+}
 </style>
-
 </head>
 <body>
 
-  <div class="wrapper">
-    <div class="title">ALIADOS - TEAM JXLL</div>
-    <div class="subtitle">Nodos verificados y enlaces autorizados de TEAM JXLL.</div>
+<canvas id="matrix-bg"></canvas>
 
-    <div class="ally-grid">
-
-      <!-- ====== TARJETA (COPIA Y PEGA PARA MÁS) ====== -->
-     <!-- FLOODHACKING -->
-<div class="ally-card">
-  <div class="ally-top">
-    <img src="https://files.catbox.moe/gl13uo.jpg" class="ally-img">
-    <div class="ally-name">FLOODHACKING</div>
+<!-- LOADER -->
+<div id="loader">
+  <div class="loader-ring"></div>
+  <div class="boot-lines">
+    <div class="boot-line">&gt; CARGANDO DIRECTORIO DE ALIADOS...</div>
+    <div class="boot-line">&gt; Verificando nodos autorizados...</div>
+    <div class="boot-line">&gt; Desencriptando registros...</div>
+    <div class="boot-line">&gt; DIRECTORIO LISTO &#9608;&#9608;&#9608;&#9608;&#9608;&#9608;&#9608;&#9608; OK</div>
   </div>
-
-  <div class="ally-desc">
-    Limpieza de Grupos, Canales, Usuarios De Telegram
-  </div>
-
-  <div class="ally-bottom">
-    <div class="ally-tag">Limpieza</div>
-    <button class="ally-btn" onclick="location.href='https://t.me/FloodHackingChannel'">
-      VISITAR
-    </button>
-  </div>
+  <div class="progress-bar"><div class="progress-fill"></div></div>
 </div>
 
-<!-- HACKPURGATORY -->
-<div class="ally-card">
-  <div class="ally-top">
-    <img src="https://files.catbox.moe/knlxdm.jpg" class="ally-img">
-    <div class="ally-name">HACKPURGATORY</div>
-  </div>
-
-  <div class="ally-desc">
-    Limpieza de Grupos, Canales, Usuarios De Telegram
-  </div>
-
-  <div class="ally-bottom">
-    <div class="ally-tag">Limpieza</div>
-    <button class="ally-btn" onclick="location.href='https://HackPurgatory.org'">
-      VISITAR
-    </button>
-  </div>
-</div>
-
-      <!-- ============================================= -->
-
-    </div>
-
-    <div class="back">
-      <a href="../index.html">← Volver al panel principal</a>
+<!-- NAVBAR -->
+<nav class="navbar">
+  <div class="nav-inner">
+    <a class="nav-logo" href="index.html">[ JXLL ]</a>
+    <div class="nav-links">
+      <a class="nav-link" href="index.html">&#8592; INICIO</a>
+      <a class="nav-link" href="insectos.html">&#11041; INSECTOS</a>
     </div>
   </div>
+</nav>
 
+<!-- MAIN -->
+<main class="main">
+
+  <div class="page-header">
+    <div class="page-title">// ALIADOS</div>
+    <div class="page-divider"></div>
+    <div class="page-sub">Nodos verificados y enlaces autorizados de TEAM JXLL.</div>
+  </div>
+
+  <div class="ally-grid">
+
+    <!-- FLOODHACKING -->
+    <div class="ally-card">
+      <img class="ally-banner" src="https://files.catbox.moe/gl13uo.jpg" alt="FloodHacking">
+      <div class="ally-body">
+        <div class="ally-top">
+          <img class="ally-avatar" src="https://files.catbox.moe/gl13uo.jpg" alt="">
+          <div>
+            <div class="ally-name">FLOODHACKING</div>
+            <div class="ally-url">t.me/FloodHackingChannel</div>
+          </div>
+        </div>
+        <div class="ally-desc">Limpieza de grupos, canales y usuarios de Telegram. Operaciones de mantenimiento de red.</div>
+        <div class="ally-bottom">
+          <div class="ally-tag">LIMPIEZA</div>
+          <button class="ally-btn" onclick="location.href='https://t.me/FloodHackingChannel'">VISITAR</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- HACKPURGATORY -->
+    <div class="ally-card">
+      <img class="ally-banner" src="https://files.catbox.moe/knlxdm.jpg" alt="HackPurgatory">
+      <div class="ally-body">
+        <div class="ally-top">
+          <img class="ally-avatar" src="https://files.catbox.moe/knlxdm.jpg" alt="">
+          <div>
+            <div class="ally-name">HACKPURGATORY</div>
+            <div class="ally-url">HackPurgatory.org</div>
+          </div>
+        </div>
+        <div class="ally-desc">Limpieza de grupos, canales y usuarios de Telegram. Infraestructura de control de red.</div>
+        <div class="ally-bottom">
+          <div class="ally-tag">LIMPIEZA</div>
+          <button class="ally-btn" onclick="location.href='https://HackPurgatory.org'">VISITAR</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- BSZTEAM -->
+    <div class="ally-card">
+      <img class="ally-banner" src="https://files.catbox.moe/wdatly.jpg" alt="BszTeam">
+      <div class="ally-body">
+        <div class="ally-top">
+          <img class="ally-avatar" src="https://files.catbox.moe/wdatly.jpg" alt="">
+          <div>
+            <div class="ally-name">BSZTEAM</div>
+            <div class="ally-url">appbsz.crearforo.net</div>
+          </div>
+        </div>
+        <div class="ally-desc">Bsz Hackers — grupo de programación y desarrollo. Comunidad técnica independiente.</div>
+        <div class="ally-bottom">
+          <div class="ally-tag">PROGRAMACIÓN</div>
+          <button class="ally-btn" onclick="location.href='https://appbsz.crearforo.net'">VISITAR</button>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <a class="back-link" href="index.html">&#8592; VOLVER AL PANEL PRINCIPAL</a>
+
+</main>
+
+<footer>
+  &#9760; JXLL RED TEAM &nbsp;|&nbsp; DIRECTORIO DE ALIADOS &nbsp;|&nbsp; 2026
+</footer>
+
+<script>
+window.addEventListener('load', () => {
+  setTimeout(() => document.getElementById('loader').classList.add('hide'), 2800);
+});
+
+// MATRIX
+const canvas = document.getElementById('matrix-bg');
+const ctx = canvas.getContext('2d');
+function resize(){ canvas.width=window.innerWidth; canvas.height=window.innerHeight; }
+resize(); window.addEventListener('resize', resize);
+const chars='JXLL01アイウエオ10ABCDEF!@#$%^&*<>?/|[]{}';
+const fs=13;
+let drops=Array.from({length:Math.floor(window.innerWidth/fs)},()=>Math.random()*-100);
+function draw(){
+  ctx.fillStyle='rgba(0,0,0,0.05)';
+  ctx.fillRect(0,0,canvas.width,canvas.height);
+  ctx.font=fs+'px "Courier New",monospace';
+  drops.forEach((y,i)=>{
+    ctx.fillStyle=Math.random()>0.95?'#FF0000':'#8B0000';
+    ctx.fillText(chars[Math.floor(Math.random()*chars.length)],i*fs,y*fs);
+    if(y*fs>canvas.height&&Math.random()>0.975)drops[i]=0;
+    drops[i]+=0.4;
+  });
+}
+setInterval(draw,55);
+</script>
 </body>
 </html>
