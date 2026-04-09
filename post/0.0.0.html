@@ -1,0 +1,1121 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css"/>
+    <link rel="icon" type="image/png" href="https://files.catbox.moe/6yamd7.png">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Team Jxxl - Paste Platform</title>
+    
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Share+Tech+Mono&display=swap');
+
+      :root{
+  --bg:#000000;
+  --bg2:#080000;
+  --bg3:#0d0000;
+  --red:#8B0000;
+  --red-neon:#FF0000;
+  --red-mid:#CC0000;
+  --smoke:#2C2C2C;
+  --border:#2a0000;
+  --border2:#3a0000;
+  --offwhite:#E0E0E0;
+  --muted:#808080;
+}
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        html, body {
+            background: var(--bg);
+            color: var(--offwhite);
+            font-family: 'Share Tech Mono', 'Courier New', monospace;
+            min-height: 100vh;
+            overflow-x: hidden;
+        }
+
+        body::before {
+            content: '';
+            position: fixed;
+            inset: 0;
+            background: repeating-linear-gradient(to bottom, transparent 0px, transparent 3px, rgba(0,255,204,0.03) 3px, rgba(0,255,204,0.03) 4px);
+            pointer-events: none;
+            z-index: 9998;
+        }
+
+        #matrix-bg {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 0;
+            opacity: 0.05;
+            pointer-events: none;
+        }
+
+        #loader {
+            position: fixed;
+            inset: 0;
+            background: #0a0a0a;
+            z-index: 9999;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            gap: 20px;
+            transition: opacity 0.8s;
+        }
+        #loader.hide { opacity: 0; pointer-events: none; }
+        .loader-hex {
+            width: 60px;
+            height: 60px;
+            position: relative;
+            animation: hexSpin 2s linear infinite;
+        }
+        .loader-hex::before, .loader-hex::after {
+            content: '';
+            position: absolute;
+            inset: 0;
+            border: 2px solid transparent;
+            border-top-color: #00ffcc;
+            border-radius: 50%;
+        }
+        .loader-hex::before { animation: hexSpin 1s linear infinite; }
+        .loader-hex::after {
+            border-top-color: #00ccaa;
+            animation: hexSpin 1.5s linear infinite reverse;
+        }
+        .loader-inner {
+            position: absolute;
+            inset: 12px;
+            border: 1px solid #00ffcc33;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #00ffcc;
+            font-size: 1.1em;
+            text-shadow: 0 0 8px #00ffcc;
+        }
+        @keyframes hexSpin { to { transform: rotate(360deg); } }
+
+        .boot-lines {
+            width: 320px;
+            font-size: 11px;
+            color: #00ccaa;
+            line-height: 2;
+            border: 1px solid #00ffcc33;
+            padding: 12px 16px;
+            box-shadow: 0 0 16px rgba(0,255,204,0.15);
+        }
+        .boot-line { opacity: 0; animation: bApp 0.4s forwards; }
+        .boot-line:nth-child(1) { animation-delay: 0.3s; }
+        .boot-line:nth-child(2) { animation-delay: 0.8s; }
+        .boot-line:nth-child(3) { animation-delay: 1.3s; }
+        .boot-line:nth-child(4) { animation-delay: 1.8s; color: #00ffcc; }
+        @keyframes bApp { to { opacity: 1; } }
+        .pbar { width: 320px; height: 3px; background: #1a1a1a; border: 1px solid #00ffcc33; overflow: hidden; }
+        .pfill { height: 100%; width: 0%; background: linear-gradient(90deg, #00ccaa, #00ffcc); animation: pFill 2.5s ease-out forwards; box-shadow: 0 0 6px #00ffcc; }
+        @keyframes pFill { to { width: 100%; } }
+
+        .navbar {
+            position: fixed;
+            top: 0;
+            width: 100%;
+            z-index: 100;
+            background: rgba(10,10,10,0.97);
+            border-bottom: 1px solid var(--primary);
+            box-shadow: 0 0 20px rgba(0,255,204,0.25);
+            padding: 9px 0;
+        }
+        .nav-container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 0 16px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            position: relative;
+        }
+        .nav-logo {
+            color: #00ffcc;
+            font-size: 1em;
+            letter-spacing: 4px;
+            font-weight: bold;
+            text-shadow: 0 0 10px #00ffcc;
+            animation: pNeon 2.5s ease-in-out infinite;
+            text-decoration: none;
+        }
+        @keyframes pNeon { 0%,100% { opacity: 1; } 50% { opacity: 0.75; } }
+
+        .menu-toggle {
+            display: block;
+            background: none;
+            border: 1px solid var(--border2);
+            color: #00ffcc;
+            padding: 6px 13px;
+            cursor: pointer;
+            border-radius: 2px;
+            font-family: inherit;
+            font-size: 1em;
+            transition: all 0.3s;
+        }
+        .menu-toggle:hover { background: rgba(0,255,204,0.1); }
+        @media(min-width: 768px) { .menu-toggle { display: none; } }
+
+        .nav-list {
+            display: none;
+            flex-direction: column;
+            position: absolute;
+            top: 100%;
+            left: 0;
+            right: 0;
+            background: #0a0a0a;
+            border-top: 1px solid var(--border);
+            z-index: 99;
+            padding: 8px 0;
+            list-style: none;
+        }
+        .nav-list.show { display: flex; }
+        @media(min-width: 768px) {
+            .nav-list {
+                display: flex !important;
+                flex-direction: row;
+                position: static;
+                background: none;
+                border: none;
+                padding: 0;
+            }
+        }
+        .nav-list li { border-bottom: 1px solid var(--border); width: 100%; }
+        @media(min-width: 768px) { .nav-list li { border: none; width: auto; margin-right: 4px; } }
+        .nav-list a {
+            color: #00ccaa;
+            text-decoration: none;
+            padding: 10px 16px;
+            display: block;
+            letter-spacing: 1px;
+            font-size: 0.78em;
+            text-transform: uppercase;
+            transition: all 0.3s;
+        }
+        @media(min-width: 768px) { .nav-list a { padding: 5px 10px; display: inline; } }
+        .nav-list a:hover, .nav-list a.active { color: #00ffcc; background: rgba(0,255,204,0.06); }
+
+        .container-main {
+            position: relative;
+            z-index: 1;
+            display: flex;
+            flex-direction: column;
+            gap: 14px;
+            padding: 80px 14px 80px;
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+        @media(min-width: 1024px) {
+            .container-main {
+                display: grid;
+                grid-template-columns: 1fr 2fr 1fr;
+                gap: 18px;
+                padding: 80px 18px 80px;
+            }
+        }
+
+        .column {
+            background: var(--bg2);
+            border: 1px solid var(--border);
+            padding: 16px;
+            box-shadow: 0 0 12px rgba(0,255,204,0.08);
+            animation: fadeIn 0.7s ease-out both;
+            position: relative;
+            overflow: hidden;
+        }
+        .column::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 1px;
+            background: linear-gradient(90deg, transparent, #00ffcc, transparent);
+        }
+
+        h2, h3 {
+            color: #00ffcc;
+            margin-bottom: 14px;
+            font-size: 0.95em;
+            letter-spacing: 3px;
+            text-transform: uppercase;
+            border-left: 2px solid #00ffcc;
+            padding-left: 10px;
+            text-shadow: 0 0 6px rgba(0,255,204,0.3);
+            position: relative;
+            padding-bottom: 10px;
+        }
+        h2::after, h3::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            height: 1px;
+            background: linear-gradient(90deg, #00ffcc33, transparent);
+        }
+
+        /* Perfil Header Styles */
+        .profile-header {
+            background: var(--bg3);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            overflow: hidden;
+            margin-bottom: 16px;
+        }
+        .profile-cover {
+            width: 100%;
+            height: 100px;
+            object-fit: cover;
+            background: linear-gradient(135deg, #00ffcc22 0%, #00ccaa44 100%);
+        }
+        .profile-avatar-section {
+            display: flex;
+            justify-content: center;
+            margin-top: -40px;
+            margin-bottom: 10px;
+        }
+        .profile-avatar {
+            width: 70px;
+            height: 70px;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 3px solid #00ffcc;
+            background: var(--bg2);
+            box-shadow: 0 0 15px rgba(0,255,204,0.4);
+        }
+        .profile-info {
+            text-align: center;
+            padding: 0 16px 16px;
+        }
+        .profile-name {
+            color: #00ffcc;
+            font-size: 1.2em;
+            letter-spacing: 2px;
+            margin-bottom: 5px;
+        }
+        .profile-bio {
+            font-size: 0.75em;
+            color: var(--muted);
+            margin-bottom: 12px;
+        }
+        .profile-stats {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+            margin-top: 10px;
+        }
+        .profile-stat {
+            text-align: center;
+            background: var(--bg);
+            border: 1px solid var(--border);
+            padding: 6px 12px;
+            border-radius: 4px;
+            min-width: 70px;
+        }
+        .profile-stat .stat-number {
+            font-size: 1.1em;
+            font-weight: bold;
+            color: #00ffcc;
+            display: block;
+        }
+        .profile-stat .stat-label {
+            font-size: 9px;
+            color: var(--muted);
+            letter-spacing: 1px;
+        }
+
+        .table-wrapper {
+            width: 100%;
+            overflow-x: auto;
+            -webkit-overflow-scrolling: touch;
+            margin-bottom: 12px;
+        }
+        #tabla-posts, #tabla-posts-user {
+            width: 100%;
+            border-collapse: collapse;
+            background: #050505;
+            color: var(--offwhite);
+            border: 1px solid var(--primary);
+            box-shadow: 0 0 10px rgba(0,255,204,0.1);
+            min-width: 500px;
+        }
+        #tabla-posts thead, #tabla-posts-user thead {
+            background: var(--primary);
+            color: #000;
+            text-transform: uppercase;
+        }
+        #tabla-posts thead th, #tabla-posts-user thead th {
+            padding: 9px 10px;
+            font-size: 11px;
+            letter-spacing: 1px;
+        }
+        #tabla-posts tbody td, #tabla-posts-user tbody td {
+            padding: 8px 10px;
+            text-align: center;
+            border-top: 1px solid var(--border);
+            font-size: 12px;
+        }
+        #tabla-posts tbody tr:nth-child(even),
+        #tabla-posts-user tbody tr:nth-child(even) { background: #0a0a0a; }
+        #tabla-posts tbody tr:hover,
+        #tabla-posts-user tbody tr:hover { background: #0f0f0f; transition: background 0.2s; }
+
+        .url-btn {
+            background: rgba(0,255,204,0.1);
+            border: 1px solid #00ffcc;
+            color: #00ffcc;
+            padding: 3px 8px;
+            cursor: pointer;
+            font-size: 10px;
+            font-family: inherit;
+            letter-spacing: 1px;
+            transition: all 0.3s;
+            border-radius: 3px;
+            text-decoration: none;
+        }
+        .url-btn:hover { background: rgba(0,255,204,0.3); box-shadow: 0 0 6px rgba(0,255,204,0.4); }
+
+        .user-list {
+            list-style: none;
+            display: flex;
+            flex-wrap: wrap;
+            gap: 12px;
+            margin-top: 12px;
+            padding: 0;
+            justify-content: center;
+        }
+        .user-card {
+            background: var(--bg3);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            padding: 8px;
+            text-align: center;
+            transition: all 0.3s;
+            cursor: pointer;
+            animation: fadeInUp 0.5s ease-out both;
+            min-width: 80px;
+            width: 80px;
+        }
+        .user-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 4px 14px rgba(0,255,204,0.2);
+            border-color: #00ffcc;
+        }
+        .user-card img {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 2px solid #00ffcc;
+            margin-bottom: 6px;
+            display: block;
+            margin-left: auto;
+            margin-right: auto;
+        }
+        .user-card p {
+            font-size: 10px;
+            color: #00ffcc;
+            letter-spacing: 1px;
+            word-break: break-word;
+        }
+
+        .stats p {
+            font-size: 0.8em;
+            color: var(--muted);
+            padding: 6px 0;
+            border-bottom: 1px solid var(--border);
+            letter-spacing: 1px;
+        }
+        .stats p:last-child { border: none; }
+        .stat-value { color: #00ffcc; text-shadow: 0 0 6px rgba(0,255,204,0.4); }
+
+        .overlay {
+            position: fixed;
+            inset: 0;
+            background: rgba(10,10,10,0.98);
+            display: none;
+            justify-content: center;
+            align-items: center;
+            z-index: 600;
+            animation: fadeIn 0.3s;
+        }
+        .overlay.show { display: flex; }
+        .overlay .container {
+            background: var(--bg2);
+            border: 1px solid var(--border2);
+            padding: 24px;
+            width: 92%;
+            max-width: 420px;
+            box-shadow: 0 0 24px rgba(0,255,204,0.15);
+            animation: slideUp 0.4s ease-out;
+            border-radius: 8px;
+        }
+        .glitch-text {
+            color: #00ffcc;
+            font-size: 1em;
+            letter-spacing: 3px;
+            text-shadow: 0 0 8px rgba(0,255,204,0.4);
+            text-transform: uppercase;
+            margin-bottom: 18px;
+            border-left: 2px solid #00ffcc;
+            padding-left: 10px;
+        }
+
+        .form-group { margin-bottom: 16px; }
+        label {
+            display: block;
+            margin-bottom: 6px;
+            color: #00ccaa;
+            font-size: 0.8em;
+            letter-spacing: 1px;
+        }
+        input[type="text"], input[type="password"], input[type="file"], textarea {
+            width: 100%;
+            padding: 9px 10px;
+            background: rgba(0,0,0,0.6);
+            border: 1px solid var(--border2);
+            color: var(--offwhite);
+            font-family: inherit;
+            font-size: 0.85em;
+            transition: all 0.3s;
+            border-radius: 4px;
+        }
+        input:focus, textarea:focus {
+            outline: none;
+            border-color: #00ffcc;
+            box-shadow: 0 0 8px rgba(0,255,204,0.2);
+        }
+        .form-btn, button {
+            background: rgba(0,255,204,0.15);
+            border: 1px solid #00ffcc;
+            color: #00ffcc;
+            padding: 9px 20px;
+            cursor: pointer;
+            font-family: inherit;
+            letter-spacing: 2px;
+            font-size: 0.8em;
+            text-transform: uppercase;
+            width: 100%;
+            transition: all 0.3s;
+            border-radius: 4px;
+        }
+        .form-btn:hover, button:hover {
+            background: rgba(0,255,204,0.3);
+            box-shadow: 0 0 12px rgba(0,255,204,0.25);
+        }
+        .toggle-link {
+            color: #00ccaa;
+            text-decoration: none;
+            font-size: 0.75em;
+            transition: color 0.3s;
+        }
+        .toggle-link:hover { color: #00ffcc; }
+
+        .bottom-menu {
+            display: flex;
+            justify-content: space-around;
+            align-items: center;
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            background: rgba(10,10,10,0.98);
+            box-shadow: 0 -2px 10px rgba(0,255,204,0.1);
+            border-top: 1px solid #00ffcc33;
+            z-index: 201;
+            padding: 8px 0;
+        }
+        .menu-item, .menu-item2 {
+            text-align: center;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+        }
+        .circle, .circle2, .circle3 {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            width: 45px;
+            height: 45px;
+            border-radius: 50%;
+            background: var(--bg3);
+            border: 1px solid #00ffcc;
+            font-size: 20px;
+            margin-bottom: 4px;
+            transition: transform 0.3s ease, background-color 0.3s ease;
+            color: #00ffcc;
+        }
+        .circle:hover, .circle2:hover, .circle3:hover {
+            transform: scale(1.1);
+            background: rgba(0,255,204,0.2);
+        }
+        .circle2 { position: relative; top: -15px; width: 50px; height: 50px; background: #00ffcc22; }
+        .circle3 { position: relative; top: -20px; width: 55px; height: 55px; background: #00ffcc33; }
+        .menu-item span, .menu-item2 span {
+            font-size: 9px;
+            font-weight: bold;
+            color: #00ccaa;
+            font-family: 'Share Tech Mono', monospace;
+            margin-top: 4px;
+            text-align: center;
+        }
+
+        #avatarLinkNav {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        #avatarLinkNav img {
+            width: 28px;
+            height: 28px;
+            border-radius: 50%;
+            border: 1px solid #00ffcc;
+        }
+
+        #link-container {
+            margin-top: 15px;
+            display: none;
+        }
+        #generated-link {
+            background: #0a0a0a;
+            color: #00ffcc;
+            font-size: 11px;
+        }
+
+        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+        @keyframes fadeInUp { from { opacity: 0; transform: translateY(16px); } to { opacity: 1; transform: translateY(0); } }
+        @keyframes slideUp { from { opacity: 0; transform: translateY(30px); } to { opacity: 1; transform: translateY(0); } }
+
+        /* Scrollbar */
+        ::-webkit-scrollbar { width: 6px; height: 6px; }
+        ::-webkit-scrollbar-track { background: var(--bg3); }
+        ::-webkit-scrollbar-thumb { background: #00ffcc; border-radius: 3px; }
+    </style>
+</head>
+<body>
+    <div id="loader">
+        <div class="loader-hex"><div class="loader-inner">JXXL</div></div>
+        <div class="boot-lines">
+            <div class="boot-line">> INICIANDO SISTEMA...</div>
+            <div class="boot-line">> VERIFICANDO CREDENCIALES...</div>
+            <div class="boot-line">> CONECTANDO A SUPABASE...</div>
+            <div class="boot-line">> LISTO.</div>
+        </div>
+        <div class="pbar"><div class="pfill"></div></div>
+    </div>
+
+
+
+    <nav class="navbar">
+        <div class="nav-container">
+            <div class="nav-logo">TEAM JXXL</div>
+            <ul class="nav-list" id="navList">
+                <li><a href="#">Index</a></li>
+                <li><a href="#" id="loginLinkNav">Login</a></li>
+                <li><a href="#" id="avatarLinkNav" style="display: none;"></a></li>
+            </ul>
+            <button class="menu-toggle" id="menuToggle">☰</button>
+        </div>
+    </nav> 
+
+    <div class="container-main">
+        <div class="column">
+            <h3>MIEMBROS</h3>
+            <div id="usersList" class="user-list"></div>
+            <div class="stats" id="statsPanel"></div>
+        </div>
+
+        <div class="column">
+            <h3>POSTS RECIENTES</h3>
+            <div class="table-wrapper">
+                <table id="tabla-posts">
+                    <thead><tr><th>Título</th><th>Enlace</th></tr></thead>
+                    <tbody id="postsBody"></tbody>
+                </table>
+            </div>
+            
+            <h3>CREAR POST</h3>
+            <input type="text" id="post_name" placeholder="Título del Post">
+            <textarea id="code" rows="6" placeholder="Contenido del post..."></textarea>
+            <button id="save-button">PUBLICAR</button>
+            <div id="link-container">
+                <label>Link generado:</label>
+                <input type="text" id="generated-link" readonly>
+                <button id="copy-button">Copiar Link</button>
+            </div>
+        </div>
+
+        <div class="column">
+            <h3>MIS POSTS</h3>
+            <div class="table-wrapper">
+                <table id="tabla-posts-user">
+                    <thead><tr><th>Título</th><th>Enlace</th></tr></thead>
+                    <tbody id="userPostsBody"></tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <div class="overlay" id="overlay">
+        <div class="container">
+            <h1 class="glitch-text">TEAM JXXL</h1>
+            <form id="registrationForm">
+                <div class="form-group">
+                    <label>NICK:</label>
+                    <input type="text" id="nick" required minlength="5">
+                </div>
+                <div class="form-group">
+                    <label>CONTRASEÑA:</label>
+                    <input type="password" id="password" required minlength="6">
+                </div>
+                <div class="form-group">
+                    <label>IMAGEN (OPCIONAL):</label>
+                    <input type="file" id="img" accept="image/*">
+                </div>
+                <button type="submit">REGISTRAR</button>
+                <br><br>
+                <button type="button" id="toggleForm">¿YA TIENES CUENTA? INICIAR SESIÓN</button>
+            </form>
+            <form id="loginForm" style="display: none;">
+                <h2>INICIAR SESIÓN</h2>
+                <div class="form-group">
+                    <label>NICK:</label>
+                    <input type="text" id="loginNick" required>
+                </div>
+                <div class="form-group">
+                    <label>CONTRASEÑA:</label>
+                    <input type="password" id="loginPassword" required>
+                </div>
+                <button type="submit" id="loginSubmitBtn">INGRESAR</button>
+            </form>
+        </div>
+    </div>
+
+    <script>
+        // ==================== CONFIGURACIÓN ====================
+        const MOCKAPI_URL = 'https://69d75f459c5ebb0918c77973.mockapi.io/jxxl/dox/1809284927309381080812098492848102984098120840921/92019301920390129039120/Team/User';
+        const MOCKAPI_POSTS_URL = 'https://69d75f459c5ebb0918c77973.mockapi.io/jxxl/dox/1809284927309381080812098492848102984098120840921/92019301920390129039120/Team/post';
+        
+        const SUPABASE_URL = 'https://tvjmfuaaydjepogtizrx.supabase.co';
+        const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InR2am1mdWFheWRqZXBvZ3RpenJ4Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3MzQ1MTIwMDAsImV4cCI6MjA1MDA4ODAwMH0.test';
+
+        let currentUser = null;
+        let userImg = 'https://files.catbox.moe/cqgdde.png';
+
+        // ==================== FUNCIONES SUPABASE ====================
+        async function supabaseRequest(endpoint, method, body) {
+            const response = await fetch(`${SUPABASE_URL}/rest/v1/${endpoint}`, {
+                method: method,
+                headers: {
+                    'Content-Type': 'application/json',
+                    'apikey': SUPABASE_ANON_KEY,
+                    'Authorization': `Bearer ${SUPABASE_ANON_KEY}`
+                },
+                body: body ? JSON.stringify(body) : undefined
+            });
+            return await response.json();
+        }
+
+        async function saveToSupabase(userData) {
+            try {
+                const existing = await supabaseRequest(`users?name=eq.${userData.name}`, 'GET');
+                if (existing && existing.length > 0) return existing[0];
+                
+                const result = await supabaseRequest('users', 'POST', {
+                    id: userData.id,
+                    fechaCreacion: new Date().toISOString(),
+                    name: userData.name,
+                    password: userData.password,
+                    img: userData.img
+                });
+                return result;
+            } catch (error) {
+                console.error('Error en Supabase:', error);
+                return null;
+            }
+        }
+
+        async function checkSupabaseUser(name, password) {
+            try {
+                const users = await supabaseRequest(`users?name=eq.${encodeURIComponent(name)}`, 'GET');
+                if (users && users.length > 0 && users[0].password === password) {
+                    return users[0];
+                }
+                return null;
+            } catch (error) {
+                console.error('Error verificando en Supabase:', error);
+                return null;
+            }
+        }
+
+        // ==================== FUNCIONES MOCKAPI ====================
+        async function getMockAPIUsers() {
+            const response = await fetch(MOCKAPI_URL);
+            return await response.json();
+        }
+
+        async function saveToMockAPI(userData) {
+            const response = await fetch(MOCKAPI_URL, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(userData)
+            });
+            return await response.json();
+        }
+
+        async function updateMockAPIUser(id, data) {
+            const response = await fetch(`${MOCKAPI_URL}/${id}`, {
+                method: 'PUT',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(data)
+            });
+            return await response.json();
+        }
+
+        async function getMockAPIUserById(id) {
+            const response = await fetch(`${MOCKAPI_URL}/${id}`);
+            return await response.json();
+        }
+
+        // ==================== REGISTRO ====================
+        async function registerUser(nick, password, imgUrl) {
+            const mockUsers = await getMockAPIUsers();
+            const existing = mockUsers.find(u => u.name === nick);
+            if (existing) {
+                alert('El usuario ya existe');
+                return false;
+            }
+
+            const newUser = {
+                id: String(Date.now()),
+                name: nick,
+                img: imgUrl,
+                "post-titulo": "null",
+                guardarpost: [],
+                seguidos: "0",
+                seguidores: "0",
+                "nick-seguidos": "null",
+                "url-portada": "",
+                descripcionuser: "Miembro de Team Jxxl",
+                etiquetasuser: "#TeamJxxl"
+            };
+
+            const mockResult = await saveToMockAPI(newUser);
+            
+            const supabaseResult = await saveToSupabase({
+                id: mockResult.id,
+                name: nick,
+                password: password,
+                img: imgUrl
+            });
+
+            if (mockResult && supabaseResult) {
+                localStorage.setItem('user', JSON.stringify({ 
+                    id: mockResult.id, 
+                    name: nick, 
+                    password: password, 
+                    img: imgUrl 
+                }));
+                return true;
+            }
+            return false;
+        }
+
+        // ==================== LOGIN ====================
+        async function loginUser(nick, password) {
+            const supabaseUser = await checkSupabaseUser(nick, password);
+            
+            if (!supabaseUser) {
+                alert('Credenciales incorrectas');
+                return false;
+            }
+
+            const mockUsers = await getMockAPIUsers();
+            const mockUser = mockUsers.find(u => u.name === nick);
+            
+            if (!mockUser) {
+                alert('Datos de perfil no encontrados');
+                return false;
+            }
+
+            localStorage.setItem('user', JSON.stringify({
+                id: mockUser.id,
+                name: mockUser.name,
+                password: password,
+                img: mockUser.img
+            }));
+            
+            currentUser = mockUser;
+            return true;
+        }
+
+        // ==================== GUARDAR POST ====================
+        async function guardarPostEnAmbos(titulo, url) {
+            if (!currentUser) {
+                const stored = localStorage.getItem('user');
+                if (!stored) {
+                    alert('Debes iniciar sesión primero');
+                    return false;
+                }
+                currentUser = JSON.parse(stored);
+                const mockUsers = await getMockAPIUsers();
+                const found = mockUsers.find(u => u.id === currentUser.id);
+                if (found) currentUser = found;
+            }
+
+            let guardarpost = Array.isArray(currentUser.guardarpost) ? [...currentUser.guardarpost] : [];
+            
+            const newPost = {
+                "post-titulo": titulo,
+                "url": url
+            };
+            
+            guardarpost.push(newPost);
+            
+            const updateData = {
+                guardarpost: guardarpost
+            };
+            
+            const updated = await updateMockAPIUser(currentUser.id, updateData);
+            
+            if (updated) {
+                currentUser.guardarpost = guardarpost;
+                await savePostToSupabase(currentUser.id, titulo, url);
+                return true;
+            }
+            return false;
+        }
+
+        async function savePostToSupabase(userId, titulo, url) {
+            try {
+                await supabaseRequest('posts', 'POST', {
+                    user_id: userId,
+                    titulo: titulo,
+                    url: url,
+                    fecha: new Date().toISOString()
+                });
+            } catch (error) {
+                console.error('Error guardando post en Supabase:', error);
+            }
+        }
+
+        // ==================== SUBIR IMAGEN ====================
+        async function uploadImage(file) {
+            const formData = new FormData();
+            formData.append('reqtype', 'fileupload');
+            formData.append('fileToUpload', file);
+            
+            try {
+                const proxy = 'https://cors-anywhere.herokuapp.com/';
+                const res = await fetch(proxy + 'https://catbox.moe/user/api.php', {
+                    method: 'POST',
+                    body: formData
+                });
+                const url = await res.text();
+                if (url.startsWith("https://")) return url;
+                return 'https://files.catbox.moe/cqgdde.png';
+            } catch {
+                return 'https://files.catbox.moe/cqgdde.png';
+            }
+        }
+
+        // ==================== RENDERIZAR UI ====================
+        async function renderUsers() {
+            const users = await getMockAPIUsers();
+            const usersList = document.getElementById('usersList');
+            usersList.innerHTML = users.slice(0, 12).map(user => `
+                <div class="user-card" onclick="viewUserProfile('${user.id}')">
+                    <img src="${user.img}" onerror="this.src='https://files.catbox.moe/cqgdde.png'">
+                    <p>${user.name}</p>
+                </div>
+            `).join('');
+        }
+
+        async function renderAllPosts() {
+            try {
+                const response = await fetch(MOCKAPI_POSTS_URL);
+                let posts = await response.json();
+                if (!Array.isArray(posts)) posts = [];
+                
+                const postsBody = document.getElementById('postsBody');
+                postsBody.innerHTML = posts.slice(0, 20).map(post => `
+                    <tr>
+                        <td>${post.title || post['post-titulo'] || 'Sin título'}</td>
+                        <td><a href="${post.url}" target="_blank" class="url-btn">Ver</a></td>
+                    </tr>
+                `).join('');
+            } catch (error) {
+                console.error('Error cargando posts:', error);
+            }
+        }
+
+        function renderUserPosts() {
+            const stored = localStorage.getItem('user');
+            if (!stored) {
+                document.getElementById('userPostsBody').innerHTML = '<tr><td colspan="2">Inicia sesión para ver tus posts</td></tr>';
+                return;
+            }
+            
+            const user = JSON.parse(stored);
+            
+            getMockAPIUsers().then(users => {
+                const fullUser = users.find(u => u.id === user.id);
+                if (fullUser && fullUser.guardarpost && fullUser.guardarpost.length > 0) {
+                    document.getElementById('userPostsBody').innerHTML = fullUser.guardarpost.map(post => `
+                        <tr>
+                            <td>${post['post-titulo'] || 'Sin título'}</td>
+                            <td><a href="${post.url}" target="_blank" class="url-btn">Ver</a></td>
+                        </tr>
+                    `).join('');
+                } else {
+                    document.getElementById('userPostsBody').innerHTML = '<tr><td colspan="2">No tienes posts aún</td></tr>';
+                }
+            });
+        }
+
+        function updateUIAfterLogin() {
+            const stored = localStorage.getItem('user');
+            if (stored) {
+                const user = JSON.parse(stored);
+                document.getElementById('loginLinkNav').style.display = 'none';
+                const avatarLink = document.getElementById('avatarLinkNav');
+                avatarLink.innerHTML = `<img src="${user.img}" onerror="this.src='https://files.catbox.moe/cqgdde.png'"> ${user.name}`;
+                avatarLink.style.display = 'flex';
+                document.getElementById('overlay').classList.remove('show');
+                renderUserPosts();
+            } else {
+                document.getElementById('loginLinkNav').style.display = 'inline';
+                document.getElementById('avatarLinkNav').style.display = 'none';
+            }
+        }
+
+        // ==================== EVENTOS ====================
+        document.getElementById('menuToggle').addEventListener('click', () => {
+            document.getElementById('navList').classList.toggle('show');
+        });
+
+        document.getElementById('loginLinkNav').addEventListener('click', (e) => {
+            e.preventDefault();
+            document.getElementById('overlay').classList.add('show');
+        });
+
+        document.getElementById('toggleForm').addEventListener('click', () => {
+            document.getElementById('registrationForm').style.display = 'none';
+            document.getElementById('loginForm').style.display = 'block';
+        });
+
+        document.getElementById('registrationForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const nick = document.getElementById('nick').value;
+            const password = document.getElementById('password').value;
+            const file = document.getElementById('img').files[0];
+            
+            if (file) {
+                userImg = await uploadImage(file);
+            }
+            
+            const success = await registerUser(nick, password, userImg);
+            if (success) {
+                alert('Registro exitoso');
+                document.getElementById('overlay').classList.remove('show');
+                updateUIAfterLogin();
+                renderUsers();
+            }
+        });
+
+        document.getElementById('loginForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const nick = document.getElementById('loginNick').value;
+            const password = document.getElementById('loginPassword').value;
+            
+            const success = await loginUser(nick, password);
+            if (success) {
+                alert('Bienvenido a Team Jxxl');
+                document.getElementById('overlay').classList.remove('show');
+                updateUIAfterLogin();
+                renderUsers();
+                renderUserPosts();
+            }
+        });
+
+        document.getElementById('save-button').addEventListener('click', async () => {
+            const titulo = document.getElementById('post_name').value.trim();
+            const contenido = document.getElementById('code').value.trim();
+            
+            if (!titulo || !contenido) {
+                alert('Completa título y contenido');
+                return;
+            }
+            
+            try {
+                const response = await fetch(MOCKAPI_POSTS_URL, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        title: titulo,
+                        content: contenido,
+                        fecha: new Date().toISOString()
+                    })
+                });
+                
+                const data = await response.json();
+                const shareLink = `https://teamjxxl.foroactivo.com/view?id=${data.id}`;
+                
+                document.getElementById('generated-link').value = shareLink;
+                document.getElementById('link-container').style.display = 'block';
+                
+                await guardarPostEnAmbos(titulo, shareLink);
+                
+                alert('¡Post publicado!');
+                document.getElementById('post_name').value = '';
+                document.getElementById('code').value = '';
+                renderAllPosts();
+                renderUserPosts();
+            } catch (error) {
+                console.error('Error:', error);
+                alert('Error al publicar post');
+            }
+        });
+
+        document.getElementById('copy-button').addEventListener('click', () => {
+            const copyText = document.getElementById('generated-link');
+            copyText.select();
+            document.execCommand('copy');
+            alert('Link copiado');
+        });
+
+        window.viewUserProfile = async (userId) => {
+            const user = await getMockAPIUserById(userId);
+            alert(`Perfil: ${user.name}\n${user.descripcionuser || 'Sin descripción'}\nSeguidores: ${user.seguidores} | Seguidos: ${user.seguidos}`);
+        };
+
+        // ==================== INICIALIZACIÓN ====================
+        setTimeout(() => {
+            document.getElementById('loader').classList.add('hide');
+            setTimeout(() => {
+                document.getElementById('loader').style.display = 'none';
+            }, 800);
+        }, 2500);
+
+        renderUsers();
+        renderAllPosts();
+        updateUIAfterLogin();
+    </script>
+</body>
+</html>
