@@ -1,1 +1,665 @@
-visualizacion mantenimeitno
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <link rel="icon" type="image/png" href="https://files.catbox.moe/6yamd7.png">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>JXLL — Visualizador de Post</title>
+    <style>
+        :root {
+            --bg: #000000;
+            --bg2: #0a0000;
+            --bg3: #0f0000;
+            --red: #8B0000;
+            --red-neon: #FF0000;
+            --red-mid: #CC0000;
+            --border: #2a0000;
+            --border2: #3a0000;
+            --offwhite: #E0E0E0;
+            --muted: #888888;
+            --card-pad: clamp(16px, 4vw, 32px);
+            --bottom-bar: 62px;
+        }
+
+        *, *::before, *::after {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        html {
+            font-size: 16px;
+            scroll-behavior: smooth;
+        }
+
+        body {
+            font-family: 'Courier New', monospace;
+            background: var(--bg);
+            color: var(--offwhite);
+            line-height: 1.65;
+            min-height: 100vh;
+            padding: 20px 16px calc(var(--bottom-bar) + 24px);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        /* Matrix canvas bg */
+        #matrix-bg {
+            position: fixed;
+            inset: 0;
+            z-index: 0;
+            opacity: 0.07;
+            pointer-events: none;
+        }
+
+        /* Scanlines */
+        body::before {
+            content: '';
+            position: fixed;
+            inset: 0;
+            background: repeating-linear-gradient(
+                to bottom,
+                transparent 0px,
+                transparent 3px,
+                rgba(139,0,0,0.06) 3px,
+                rgba(139,0,0,0.06) 4px
+            );
+            pointer-events: none;
+            z-index: 0;
+        }
+
+        /* ===== CARD PRINCIPAL ===== */
+        .post-card {
+            position: relative;
+            z-index: 1;
+            background: var(--bg2);
+            border: 1px solid var(--border);
+            border-radius: 10px;
+            width: 100%;
+            max-width: 860px;
+            overflow: hidden;
+            box-shadow: 0 0 30px rgba(139,0,0,0.15);
+            animation: fadeUp 0.5s ease-out both;
+        }
+
+        .post-card::before {
+            content: '';
+            display: block;
+            height: 2px;
+            background: linear-gradient(90deg, transparent 0%, var(--red-neon) 40%, var(--red-mid) 60%, transparent 100%);
+        }
+
+        @keyframes fadeUp {
+            from { opacity: 0; transform: translateY(16px); }
+            to   { opacity: 1; transform: translateY(0); }
+        }
+
+        .card-body {
+            padding: var(--card-pad);
+        }
+
+        /* ===== PORTADA ===== */
+        .post-cover-wrap {
+            width: 100%;
+            max-height: 280px;
+            overflow: hidden;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .post-cover-wrap img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            display: block;
+        }
+
+        /* ===== TÍTULO ===== */
+        .post-title {
+            font-size: clamp(1.25rem, 4vw, 1.9rem);
+            color: var(--red-neon);
+            border-left: 3px solid var(--red-neon);
+            padding-left: 14px;
+            margin-bottom: 18px;
+            letter-spacing: 1.5px;
+            line-height: 1.3;
+            word-break: break-word;
+            animation: pulseBorder 2.5s ease-in-out infinite;
+        }
+
+        @keyframes pulseBorder {
+            0%, 100% { border-left-color: var(--red-neon); text-shadow: 0 0 6px rgba(255,0,0,0.25); }
+            50%       { border-left-color: var(--red-mid);  text-shadow: 0 0 14px rgba(255,0,0,0.45); }
+        }
+
+        /* ===== META BARRA ===== */
+        .post-meta {
+            display: flex;
+            flex-wrap: wrap;
+            align-items: center;
+            gap: 10px 20px;
+            padding: 10px 14px;
+            background: var(--bg3);
+            border: 1px solid var(--border);
+            border-radius: 6px;
+            margin-bottom: 22px;
+            font-size: 0.8rem;
+        }
+
+        .post-author {
+            display: flex;
+            align-items: center;
+            gap: 7px;
+            color: var(--red-mid);
+            cursor: pointer;
+            transition: color 0.2s, transform 0.2s;
+            flex-shrink: 0;
+        }
+
+        .post-author:hover {
+            color: var(--red-neon);
+            transform: translateX(2px);
+        }
+
+        .post-date {
+            display: flex;
+            align-items: center;
+            gap: 7px;
+            color: var(--muted);
+            margin-left: auto;
+        }
+
+        /* ===== IMAGEN DESTACADA ===== */
+        .post-featured-image {
+            margin: 0 0 22px;
+            text-align: center;
+        }
+
+        .post-featured-image img {
+            max-width: 100%;
+            max-height: 380px;
+            width: auto;
+            border-radius: 7px;
+            border: 1px solid var(--border);
+            transition: transform 0.3s, border-color 0.3s, box-shadow 0.3s;
+        }
+
+        .post-featured-image img:hover {
+            transform: scale(1.015);
+            border-color: var(--red-mid);
+            box-shadow: 0 0 20px rgba(139,0,0,0.3);
+        }
+
+        /* ===== CONTENIDO ===== */
+        .post-content {
+            font-size: 0.97rem;
+            line-height: 1.75;
+            margin-bottom: 24px;
+            word-break: break-word;
+            overflow-wrap: break-word;
+        }
+
+        .post-content a {
+            color: var(--red-neon);
+            text-decoration: none;
+            border-bottom: 1px dashed var(--red);
+            transition: color 0.2s, border-color 0.2s;
+        }
+
+        .post-content a:hover {
+            color: var(--red-mid);
+            border-bottom-color: var(--red-neon);
+        }
+
+        .post-content img {
+            max-width: 100%;
+            height: auto;
+            border-radius: 6px;
+            margin: 10px 0;
+            border: 1px solid var(--border);
+            display: block;
+        }
+
+        .post-content strong { color: var(--red-neon); }
+
+        .post-content h1,
+        .post-content h2,
+        .post-content h3 {
+            color: var(--red-neon);
+            margin: 18px 0 8px;
+            border-left: 2px solid var(--red);
+            padding-left: 12px;
+            font-size: 1rem;
+        }
+
+        .post-content h1 { font-size: 1.2rem; }
+        .post-content h2 { font-size: 1.08rem; }
+
+        .post-content blockquote {
+            border-left: 3px solid var(--red);
+            padding: 6px 0 6px 16px;
+            margin: 14px 0;
+            color: var(--muted);
+            font-style: italic;
+        }
+
+        .post-content ul,
+        .post-content ol {
+            margin: 10px 0;
+            padding-left: 22px;
+        }
+
+        .post-content li { margin: 4px 0; }
+
+        /* ===== LINK EXTERNO ===== */
+        .post-external-link {
+            padding: 12px 16px;
+            background: var(--bg3);
+            border: 1px solid var(--border);
+            border-radius: 6px;
+            text-align: center;
+            margin-bottom: 22px;
+        }
+
+        .post-external-link a {
+            color: var(--red-neon);
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 0.88rem;
+            letter-spacing: 0.5px;
+            transition: transform 0.2s, text-shadow 0.2s;
+        }
+
+        .post-external-link a:hover {
+            transform: translateX(4px);
+            text-shadow: 0 0 6px rgba(255,0,0,0.4);
+        }
+
+        /* ===== BOTONES ===== */
+        .button-group {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 12px;
+        }
+
+        .btn {
+            background: rgba(139,0,0,0.12);
+            border: 1px solid var(--border2);
+            color: var(--red-neon);
+            padding: 9px 18px;
+            cursor: pointer;
+            font-family: inherit;
+            font-size: 0.82rem;
+            letter-spacing: 1px;
+            border-radius: 5px;
+            display: inline-flex;
+            align-items: center;
+            gap: 7px;
+            transition: background 0.2s, border-color 0.2s, transform 0.15s, box-shadow 0.2s;
+            white-space: nowrap;
+        }
+
+        .btn:hover {
+            background: rgba(255,0,0,0.18);
+            border-color: var(--red-neon);
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(139,0,0,0.3);
+        }
+
+        .btn-primary {
+            background: rgba(139,0,0,0.25);
+            border-color: var(--red);
+        }
+
+        /* ===== LOADING / ERROR ===== */
+        .loading {
+            padding: 50px 20px;
+            text-align: center;
+            color: var(--muted);
+        }
+
+        .loading i {
+            font-size: 2rem;
+            color: var(--red);
+            animation: spin 0.9s linear infinite;
+            margin-bottom: 12px;
+            display: block;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+
+        .error-box {
+            padding: 40px 20px;
+            text-align: center;
+        }
+
+        .error-box i {
+            font-size: 2.5rem;
+            color: var(--red);
+            margin-bottom: 16px;
+            display: block;
+        }
+
+        /* ===== BARRA INFERIOR ===== */
+        .bottom-bar {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            display: flex;
+            justify-content: space-around;
+            align-items: center;
+            background: rgba(0, 0, 0, 0.97);
+            border-top: 1px solid var(--red);
+            box-shadow: 0 -2px 20px rgba(139,0,0,0.25);
+            padding: 6px 0 max(6px, env(safe-area-inset-bottom));
+            z-index: 100;
+            height: var(--bottom-bar);
+        }
+
+        .menu-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 3px;
+            cursor: pointer;
+            transition: transform 0.2s;
+            padding: 0 12px;
+            text-decoration: none;
+        }
+
+        .menu-item:hover {
+            transform: translateY(-3px);
+        }
+
+        .circle {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: rgba(139,0,0,0.12);
+            border: 1px solid var(--border);
+            color: var(--red-neon);
+            font-size: 1rem;
+            transition: background 0.2s, border-color 0.2s, box-shadow 0.2s;
+        }
+
+        .menu-item:hover .circle {
+            background: rgba(255,0,0,0.18);
+            border-color: var(--red-mid);
+            box-shadow: 0 0 10px rgba(255,0,0,0.25);
+        }
+
+        .menu-item span {
+            font-size: 8.5px;
+            color: var(--muted);
+            letter-spacing: 1px;
+            text-transform: uppercase;
+        }
+
+        .menu-item:hover span {
+            color: var(--red-neon);
+        }
+
+        /* ===== SCROLLBAR ===== */
+        ::-webkit-scrollbar { width: 6px; }
+        ::-webkit-scrollbar-track { background: var(--bg); }
+        ::-webkit-scrollbar-thumb { background: var(--red); border-radius: 3px; }
+        ::-webkit-scrollbar-thumb:hover { background: var(--red-neon); }
+
+        /* ===== RESPONSIVE ===== */
+        @media (max-width: 480px) {
+            body { padding-left: 10px; padding-right: 10px; }
+            .post-title { font-size: 1.2rem; letter-spacing: 0.5px; }
+            .post-cover-wrap { max-height: 200px; }
+            .btn { font-size: 0.78rem; padding: 8px 14px; }
+            .circle { width: 36px; height: 36px; font-size: 0.9rem; }
+        }
+
+        @media (min-width: 860px) {
+            body { padding-top: 32px; padding-left: 24px; padding-right: 24px; }
+        }
+    </style>
+</head>
+<body>
+
+<canvas id="matrix-bg"></canvas>
+
+<!-- ===== POST CARD ===== -->
+<div class="post-card" id="postCard">
+
+    <!-- Estado de carga -->
+    <div class="card-body" id="loadingState">
+        <div class="loading">
+            <i class="fas fa-spinner"></i>
+            <p>Cargando post…</p>
+        </div>
+    </div>
+
+    <!-- Contenido real (oculto hasta cargar) -->
+    <div id="postContent" style="display:none;">
+
+        <!-- Portada -->
+        <div class="post-cover-wrap" id="coverWrap" style="display:none;">
+            <img id="postCover" alt="Portada">
+        </div>
+
+        <div class="card-body">
+
+            <!-- Título -->
+            <h1 class="post-title" id="postTitle"></h1>
+
+            <!-- Meta -->
+            <div class="post-meta">
+                <div class="post-author" id="postAuthor">
+                    <i class="fas fa-user"></i>
+                    <span id="authorName"></span>
+                </div>
+                <div class="post-date">
+                    <i class="fas fa-calendar-alt"></i>
+                    <span id="dateText"></span>
+                </div>
+            </div>
+
+            <!-- Imagen destacada -->
+            <div class="post-featured-image" id="featuredImageWrap" style="display:none;">
+                <img id="featuredImageSrc" alt="Imagen destacada">
+            </div>
+
+            <!-- Contenido -->
+            <div class="post-content" id="postText"></div>
+
+            <!-- Enlace externo -->
+            <div class="post-external-link" id="externalLinkWrap" style="display:none;">
+                <a id="externalLinkUrl" href="#" target="_blank" rel="noopener noreferrer">
+                    <i class="fas fa-external-link-alt"></i>
+                    Ver publicación original
+                </a>
+            </div>
+
+            <!-- Botones -->
+            <div class="button-group">
+                <button class="btn" id="shareBtn">
+                    <i class="fas fa-share-alt"></i> Compartir
+                </button>
+                <button class="btn btn-primary" onclick="location.href='https://jxll.org/redsocial.html'">
+                    <i class="fas fa-home"></i> Ir al inicio
+                </button>
+            </div>
+
+        </div>
+    </div>
+
+</div>
+
+<!-- ===== BARRA INFERIOR ===== -->
+<nav class="bottom-bar">
+    <a class="menu-item" href="https://jxll.org/redsocial.html">
+        <div class="circle"><i class="fas fa-home"></i></div>
+        <span>Inicio</span>
+    </a>
+    <a class="menu-item" href="https://jxll.org/post/0.0.0.html">
+        <div class="circle"><i class="fas fa-compass"></i></div>
+        <span>Publicar</span>
+    </a>
+    
+</nav>
+
+<script>
+    /* ---- Matrix rain ---- */
+    const canvas = document.getElementById('matrix-bg');
+    const ctx = canvas.getContext('2d');
+    const CHARS = 'JXLL01アイウエカキクケABCDEF!@#$%<>?';
+    const FS = 13;
+    let drops = [];
+
+    function resizeCanvas() {
+        canvas.width  = window.innerWidth;
+        canvas.height = window.innerHeight;
+        drops = Array.from({ length: Math.floor(canvas.width / FS) }, () => Math.random() * -80);
+    }
+    resizeCanvas();
+    window.addEventListener('resize', resizeCanvas);
+
+    function drawMatrix() {
+        ctx.fillStyle = 'rgba(0,0,0,0.05)';
+        ctx.fillRect(0, 0, canvas.width, canvas.height);
+        ctx.font = FS + 'px "Courier New",monospace';
+        drops.forEach((y, i) => {
+            ctx.fillStyle = Math.random() > 0.96 ? '#FF0000' : '#8B0000';
+            ctx.fillText(CHARS[Math.floor(Math.random() * CHARS.length)], i * FS, y * FS);
+            if (y * FS > canvas.height && Math.random() > 0.975) drops[i] = 0;
+            drops[i] += 0.4;
+        });
+    }
+    setInterval(drawMatrix, 55);
+
+    /* ---- Helpers ---- */
+    const JSONBIN_KEY = '$2a$10$/CXelVC4xLjkRon.u3NeweWC.iS69xsG84Q2RAuG0eTJOPbBlZAvu';
+
+    function formatDate(d) {
+        if (!d || d === 'null') return 'Fecha desconocida';
+        try {
+            return new Date(d).toLocaleDateString('es-ES', {
+                year: 'numeric', month: 'long', day: 'numeric',
+                hour: '2-digit', minute: '2-digit'
+            });
+        } catch { return d; }
+    }
+
+    function markdownToHtml(text) {
+        if (!text) return '';
+        let h = text
+            .replace(/&/g, '&amp;')
+            .replace(/</g, '&lt;')
+            .replace(/>/g, '&gt;');
+        h = h.replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>');
+        h = h.replace(/\*(.*?)\*/g, '<em>$1</em>');
+        h = h.replace(/__(.*?)__/g, '<u>$1</u>');
+        h = h.replace(/^### (.*?)$/gm, '<h3>$1</h3>');
+        h = h.replace(/^## (.*?)$/gm, '<h2>$1</h2>');
+        h = h.replace(/^# (.*?)$/gm, '<h1>$1</h1>');
+        h = h.replace(/&lt;center&gt;(.*?)&lt;\/center&gt;/g, '<div style="text-align:center;">$1</div>');
+        h = h.replace(/\[(.*?)\]\((.*?)\)/g, '<a href="$2" target="_blank" rel="noopener noreferrer">$1</a>');
+        h = h.replace(/!\[(.*?)\]\((.*?)\)/g, '<img src="$2" alt="$1">');
+        h = h.replace(/\n/g, '<br>');
+        return h;
+    }
+
+    function showError(msg) {
+        document.getElementById('loadingState').style.display = 'none';
+        const pc = document.getElementById('postContent');
+        pc.style.display = 'block';
+        pc.querySelector('.card-body').innerHTML = `
+            <div class="error-box">
+                <i class="fas fa-exclamation-triangle"></i>
+                <p style="margin-bottom:18px;">${msg}</p>
+                <button class="btn" onclick="location.href='https://jxll.org/'">
+                     Volver al inicio
+                </button>
+            </div>`;
+    }
+
+    /* ---- Cargar post ---- */
+    async function loadPost() {
+        const binId = new URLSearchParams(location.search).get('id');
+        if (!binId) { showError('No se ha especificado un ID de post en la URL.'); return; }
+
+        try {
+            const res = await fetch(`https://api.jsonbin.io/v3/b/${binId}`, {
+                headers: { 'X-Master-Key': JSONBIN_KEY }
+            });
+            if (!res.ok) throw new Error(`HTTP ${res.status}`);
+            const { record: post } = await res.json();
+            if (!post) throw new Error('Contenido inválido');
+
+            document.getElementById('loadingState').style.display = 'none';
+            document.getElementById('postContent').style.display = 'block';
+
+            /* Título */
+            const title = post.title || post['post-titulo'] || 'Sin título';
+            document.getElementById('postTitle').textContent = title;
+            document.title = title + ' — JXLL';
+
+            /* Autor */
+            const author = post.author || post['post-user'] || 'Anónimo';
+            document.getElementById('authorName').textContent = author;
+            document.getElementById('postAuthor').onclick = () => {
+                location.href = `https://jxll.org/perfil.html?user=${encodeURIComponent(author)}`;
+            };
+
+            /* Fecha */
+            document.getElementById('dateText').textContent = formatDate(post.date || post.fecha);
+
+            /* Portada */
+            const cover = post.cover || post.portada;
+            if (cover && cover !== 'null') {
+                document.getElementById('postCover').src = cover;
+                document.getElementById('coverWrap').style.display = 'block';
+            }
+
+            /* Imagen destacada */
+            const img = post.image || post.imagen;
+            if (img && img !== 'null') {
+                document.getElementById('featuredImageSrc').src = img;
+                document.getElementById('featuredImageWrap').style.display = 'block';
+            }
+
+            /* Contenido */
+            document.getElementById('postText').innerHTML =
+                markdownToHtml(post.content || post.contenido || post.text || '');
+
+            /* Enlace externo */
+            const url = post.url;
+            if (url && url !== 'null') {
+                document.getElementById('externalLinkUrl').href = url;
+                document.getElementById('externalLinkWrap').style.display = 'block';
+            }
+
+        } catch (err) {
+            console.error(err);
+            showError('No se pudo cargar el post. Verifica que el ID sea correcto.');
+        }
+    }
+
+    /* Botón compartir */
+    document.getElementById('shareBtn')?.addEventListener('click', () => {
+        navigator.clipboard.writeText(location.href).then(() => {
+            const btn = document.getElementById('shareBtn');
+            const orig = btn.innerHTML;
+            btn.innerHTML = '<i class="fas fa-check"></i> ¡Copiado!';
+            setTimeout(() => btn.innerHTML = orig, 2000);
+        }).catch(() => alert('No se pudo copiar el enlace'));
+    });
+
+    loadPost();
+</script>
+</body>
+</html>
