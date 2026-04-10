@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Editar Perfil </title>
+    <title>Editar Perfil - TEAM JXLL</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     <style>
         :root {
@@ -545,28 +545,44 @@
         .social-inputs {
             display: flex;
             flex-direction: column;
-            gap: 10px;
+            gap: 12px;
         }
         
         .social-input {
             display: flex;
             align-items: center;
-            gap: 10px;
+            gap: 12px;
+            padding: 8px;
+            background: rgba(0, 0, 0, 0.3);
+            border-radius: 8px;
+            border: 1px solid var(--border-color);
         }
         
         .social-input i {
-            font-size: 20px;
-            width: 30px;
+            font-size: 22px;
+            width: 35px;
             text-align: center;
         }
         
         .social-input input {
             flex: 1;
-            padding: 8px;
+            padding: 10px;
             border: 1px solid var(--accent);
             border-radius: 5px;
             background-color: rgba(0, 0, 0, 0.6);
             color: var(--text-primary);
+            font-size: 14px;
+        }
+        
+        .social-input input:focus {
+            outline: none;
+            box-shadow: var(--neon-glow);
+        }
+        
+        .social-input .input-label {
+            font-size: 12px;
+            color: var(--text-secondary);
+            min-width: 60px;
         }
         
         .password-modal, .modal {
@@ -723,6 +739,37 @@
         .blink {
             animation: blink 2s infinite;
         }
+        
+        .social-preview {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+            justify-content: flex-end;
+        }
+        
+        .social-preview i {
+            font-size: 18px;
+            color: var(--text-secondary);
+            transition: color 0.3s;
+        }
+        
+        .social-preview i:hover {
+            color: var(--accent);
+        }
+        
+        @media (max-width: 768px) {
+            .detail-label {
+                width: 100%;
+                margin-bottom: 8px;
+            }
+            .detail-value {
+                width: 100%;
+                text-align: left;
+            }
+            .social-preview {
+                justify-content: flex-start;
+            }
+        }
     </style>
 </head>
 <body>
@@ -733,7 +780,7 @@
             <button class="back-button" onclick="window.location.href='https://jxll.org/Foro.html';">
                 <i class="fas fa-arrow-left"></i>
             </button>
-            <h1>EDITAR PERFIL </h1>
+            <h1>EDITAR PERFIL - TEAM JXLL</h1>
         </div>
 
         <div id="alert-container" class="alert hidden">
@@ -758,7 +805,7 @@
                 
                 <div class="info-box">
                     <h3><i class="fas fa-shield-alt"></i> Verificación en 2 Pasos</h3>
-                    <p>Desarrollado por AvaStrOficial </p>
+                    <p>Desarrollado por TEAM JXLL</p>
                 </div>
             </form>
         </div>
@@ -814,7 +861,7 @@
                 </div>
                 
                 <div class="detail-row">
-                    <div class="detail-label"><i class="fas fa-id-card"></i>ID User</div>
+                    <div class="detail-label"><i class="fas fa-id-card"></i> ID User</div>
                     <div class="detail-value" id="idValue">Cargando...</div>
                 </div>
                 
@@ -893,7 +940,7 @@
                 
                 <div class="detail-row">
                     <div class="detail-label">
-                        <span><i class="fas fa-share-alt"></i> Perfiles Sociales</span>
+                        <span><i class="fas fa-share-alt"></i> Redes Sociales</span>
                         <button class="edit-icon-btn" onclick="editarCampo('social')">
                             <i class="fas fa-edit"></i>
                         </button>
@@ -910,12 +957,32 @@
                                 <input type="text" id="twitterInput" placeholder="Usuario de Twitter/X">
                             </div>
                             <div class="social-input">
+                                <i class="fab fa-facebook" style="color: #1877F2;"></i>
+                                <input type="text" id="facebookInput" placeholder="Usuario de Facebook">
+                            </div>
+                            <div class="social-input">
+                                <i class="fab fa-github" style="color: #6e5494;"></i>
+                                <input type="text" id="githubInput" placeholder="Usuario de GitHub">
+                            </div>
+                            <div class="social-input">
                                 <i class="fab fa-youtube" style="color: #FF0000;"></i>
                                 <input type="text" id="youtubeInput" placeholder="Canal de YouTube">
                             </div>
                             <div class="social-input">
-                                <i class="fas fa-globe"></i>
-                                <input type="text" id="websiteInput" placeholder="Sitio web">
+                                <i class="fab fa-tiktok" style="color: #00f2ea;"></i>
+                                <input type="text" id="tiktokInput" placeholder="Usuario de TikTok">
+                            </div>
+                            <div class="social-input">
+                                <i class="fab fa-telegram" style="color: #26A5E4;"></i>
+                                <input type="text" id="telegramInput" placeholder="Usuario de Telegram">
+                            </div>
+                            <div class="social-input">
+                                <i class="fab fa-discord" style="color: #5865F2;"></i>
+                                <input type="text" id="discordInput" placeholder="Usuario de Discord">
+                            </div>
+                            <div class="social-input">
+                                <i class="fas fa-globe" style="color: #ff6600;"></i>
+                                <input type="text" id="websiteInput" placeholder="Sitio web (URL completa)">
                             </div>
                         </div>
                         <button class="save-button" id="saveSocialBtn">Guardar Redes Sociales</button>
@@ -977,7 +1044,20 @@
         const SUPABASE_URL = 'https://tvjmfuaaydjepogtizrx.supabase.co';
         const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InR2am1mdWFheWRqZXBvZ3RpenJ4Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzU3MjI2OTYsImV4cCI6MjA5MTI5ODY5Nn0.sO2FdTEhKSzYQekGU6aFwllv_Uxu1V7_PIjGpilwe54';
         
-        // ========== FUNCIONES SUPABASE (Mismas que tu otra web) ==========
+        // Redes sociales disponibles
+        const socialNetworks = [
+            { name: 'instagram', icon: 'fab fa-instagram', color: '#E1306C', label: 'Instagram' },
+            { name: 'twitter', icon: 'fab fa-twitter', color: '#1DA1F2', label: 'Twitter/X' },
+            { name: 'facebook', icon: 'fab fa-facebook', color: '#1877F2', label: 'Facebook' },
+            { name: 'github', icon: 'fab fa-github', color: '#6e5494', label: 'GitHub' },
+            { name: 'youtube', icon: 'fab fa-youtube', color: '#FF0000', label: 'YouTube' },
+            { name: 'tiktok', icon: 'fab fa-tiktok', color: '#00f2ea', label: 'TikTok' },
+            { name: 'telegram', icon: 'fab fa-telegram', color: '#26A5E4', label: 'Telegram' },
+            { name: 'discord', icon: 'fab fa-discord', color: '#5865F2', label: 'Discord' },
+            { name: 'website', icon: 'fas fa-globe', color: '#ff6600', label: 'Sitio Web' }
+        ];
+        
+        // ========== FUNCIONES SUPABASE ==========
         async function supabaseRequest(endpoint, options = {}) {
             const url = `${SUPABASE_URL}/rest/v1/${endpoint}`;
             const headers = {
@@ -1124,7 +1204,6 @@
             showAlert('🔐 Verificando credenciales en Supabase...', 'warning');
             
             try {
-                // Buscar usuario por nombre en Supabase
                 const users = await supabaseRequest(`Dato?name=eq.${encodeURIComponent(username)}`, {
                     method: 'GET'
                 });
@@ -1132,10 +1211,16 @@
                 const validUser = users.find(u => u.name === username && u.password === password);
                 
                 if (validUser) {
-                    // Obtener datos públicos de MockAPI
                     const mockRes = await fetch(MOCKAPI_URL);
                     const mockUsers = await mockRes.json();
-                    const publicUser = mockUsers.find(u => u.name === username);
+                    let publicUser = mockUsers.find(u => u.name === username);
+                    
+                    if (!publicUser) {
+                        await createUserInMockAPI(username);
+                        const updatedMockRes = await fetch(MOCKAPI_URL);
+                        const updatedMockUsers = await updatedMockRes.json();
+                        publicUser = updatedMockUsers.find(u => u.name === username);
+                    }
                     
                     if (publicUser) {
                         currentUser = publicUser;
@@ -1143,20 +1228,6 @@
                             id: publicUser.id, 
                             name: publicUser.name, 
                             img: publicUser.img 
-                        }));
-                        showProfile();
-                        showAlert(`🔥 ¡Bienvenido ${currentUser.name}!`, 'success');
-                    } else {
-                        // Crear perfil en MockAPI si no existe
-                        await createUserInMockAPI(username);
-                        const updatedMockRes = await fetch(MOCKAPI_URL);
-                        const updatedMockUsers = await updatedMockRes.json();
-                        const newPublicUser = updatedMockUsers.find(u => u.name === username);
-                        currentUser = newPublicUser;
-                        localStorage.setItem('user', JSON.stringify({ 
-                            id: newPublicUser.id, 
-                            name: newPublicUser.name, 
-                            img: newPublicUser.img 
                         }));
                         showProfile();
                         showAlert(`🔥 ¡Bienvenido ${currentUser.name}!`, 'success');
@@ -1211,13 +1282,18 @@
             followedValue.textContent = currentUser.seguidos || '0';
             viewedValue.textContent = currentUser.seguidores || '0';
             
+            // Mostrar redes sociales
             if (currentUser.social && typeof currentUser.social === 'object') {
-                socialValue.innerHTML = '';
-                if (currentUser.social.instagram) socialValue.innerHTML += `<i class="fab fa-instagram"></i> `;
-                if (currentUser.social.twitter) socialValue.innerHTML += `<i class="fab fa-twitter"></i> `;
-                if (currentUser.social.youtube) socialValue.innerHTML += `<i class="fab fa-youtube"></i> `;
-                if (currentUser.social.website) socialValue.innerHTML += `<i class="fas fa-globe"></i> `;
-                if (socialValue.innerHTML === '') socialValue.textContent = 'No especificadas';
+                socialValue.innerHTML = '<div class="social-preview">';
+                socialNetworks.forEach(network => {
+                    if (currentUser.social[network.name] && currentUser.social[network.name] !== '') {
+                        socialValue.innerHTML += `<i class="${network.icon}" style="color: ${network.color}" title="${network.label}: ${currentUser.social[network.name]}"></i> `;
+                    }
+                });
+                socialValue.innerHTML += '</div>';
+                if (socialValue.innerHTML === '<div class="social-preview"></div>') {
+                    socialValue.textContent = 'No especificadas';
+                }
             } else {
                 socialValue.textContent = 'No especificadas';
             }
@@ -1380,12 +1456,22 @@
                     if (currentUser.social && typeof currentUser.social === 'object') {
                         document.getElementById('instagramInput').value = currentUser.social.instagram || '';
                         document.getElementById('twitterInput').value = currentUser.social.twitter || '';
+                        document.getElementById('facebookInput').value = currentUser.social.facebook || '';
+                        document.getElementById('githubInput').value = currentUser.social.github || '';
                         document.getElementById('youtubeInput').value = currentUser.social.youtube || '';
+                        document.getElementById('tiktokInput').value = currentUser.social.tiktok || '';
+                        document.getElementById('telegramInput').value = currentUser.social.telegram || '';
+                        document.getElementById('discordInput').value = currentUser.social.discord || '';
                         document.getElementById('websiteInput').value = currentUser.social.website || '';
                     } else {
                         document.getElementById('instagramInput').value = '';
                         document.getElementById('twitterInput').value = '';
+                        document.getElementById('facebookInput').value = '';
+                        document.getElementById('githubInput').value = '';
                         document.getElementById('youtubeInput').value = '';
+                        document.getElementById('tiktokInput').value = '';
+                        document.getElementById('telegramInput').value = '';
+                        document.getElementById('discordInput').value = '';
                         document.getElementById('websiteInput').value = '';
                     }
                     break;
@@ -1459,7 +1545,12 @@
                     newValue = {
                         instagram: document.getElementById('instagramInput').value.trim(),
                         twitter: document.getElementById('twitterInput').value.trim(),
+                        facebook: document.getElementById('facebookInput').value.trim(),
+                        github: document.getElementById('githubInput').value.trim(),
                         youtube: document.getElementById('youtubeInput').value.trim(),
+                        tiktok: document.getElementById('tiktokInput').value.trim(),
+                        telegram: document.getElementById('telegramInput').value.trim(),
+                        discord: document.getElementById('discordInput').value.trim(),
                         website: document.getElementById('websiteInput').value.trim()
                     };
                     Object.keys(newValue).forEach(key => { if (!newValue[key]) delete newValue[key]; });
@@ -1505,7 +1596,6 @@
                 
                 await updateUserData({ [window.pendingUpdate.field]: window.pendingUpdate.value });
                 
-                // Actualizar también en Supabase
                 await supabaseRequest(`Dato?name=eq.${encodeURIComponent(username)}`, {
                     method: 'PATCH',
                     body: JSON.stringify({ name: window.pendingUpdate.value })
@@ -1515,7 +1605,6 @@
                 showAlert('✅ Cambios guardados correctamente', 'success');
                 resetFieldUI(window.pendingUpdate.field === 'descripcionuser' ? 'bio' : window.pendingUpdate.field);
                 
-                // Actualizar localStorage
                 const storedUser = getCurrentUser();
                 if (storedUser) {
                     storedUser.name = window.pendingUpdate.value;
@@ -1550,12 +1639,16 @@
                     break;
                 case 'social':
                     if (currentUser.social && typeof currentUser.social === 'object') {
-                        socialValue.innerHTML = '';
-                        if (currentUser.social.instagram) socialValue.innerHTML += `<i class="fab fa-instagram"></i> `;
-                        if (currentUser.social.twitter) socialValue.innerHTML += `<i class="fab fa-twitter"></i> `;
-                        if (currentUser.social.youtube) socialValue.innerHTML += `<i class="fab fa-youtube"></i> `;
-                        if (currentUser.social.website) socialValue.innerHTML += `<i class="fas fa-globe"></i> `;
-                        if (socialValue.innerHTML === '') socialValue.textContent = 'No especificadas';
+                        socialValue.innerHTML = '<div class="social-preview">';
+                        socialNetworks.forEach(network => {
+                            if (currentUser.social[network.name] && currentUser.social[network.name] !== '') {
+                                socialValue.innerHTML += `<i class="${network.icon}" style="color: ${network.color}" title="${network.label}: ${currentUser.social[network.name]}"></i> `;
+                            }
+                        });
+                        socialValue.innerHTML += '</div>';
+                        if (socialValue.innerHTML === '<div class="social-preview"></div>') {
+                            socialValue.textContent = 'No especificadas';
+                        }
                     } else {
                         socialValue.textContent = 'No especificadas';
                     }
@@ -1577,7 +1670,6 @@
                 
                 currentUser = await response.json();
                 
-                // Actualizar localStorage
                 const storedUser = getCurrentUser();
                 if (storedUser) {
                     storedUser.name = currentUser.name;
