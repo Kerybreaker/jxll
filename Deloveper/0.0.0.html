@@ -1,1 +1,576 @@
-mantenimiento
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+  <title>TEAM JXLL — Visualizador de Perfil</title>
+  <!-- Font Awesome 6 (gratuito) -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      background: #0a0a0a;
+      font-family: 'Courier New', 'Fira Code', monospace;
+      color: #ff3333;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 100vh;
+      padding: 2rem 1rem;
+    }
+
+    /* Fondo Matrix sutil */
+    body::before {
+      content: "";
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background-image: 
+        linear-gradient(rgba(255, 0, 0, 0.03) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(255, 0, 0, 0.03) 1px, transparent 1px);
+      background-size: 24px 24px;
+      pointer-events: none;
+      z-index: -1;
+    }
+
+    /* Contenedor principal estilo "caja flotante" */
+    .perfil-container {
+      max-width: 950px;
+      width: 100%;
+      margin: 0 auto;
+      background: rgba(10, 5, 5, 0.75);
+      backdrop-filter: blur(8px);
+      border: 1px solid #8b0000;
+      border-radius: 28px;
+      box-shadow: 0 0 24px rgba(255, 0, 0, 0.25);
+      overflow: hidden;
+      transition: all 0.2s;
+    }
+
+    /* Header con neón */
+    .perfil-header {
+      background: #0f0000;
+      padding: 0.9rem 1.5rem;
+      border-bottom: 2px solid #cc0000;
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-between;
+      align-items: baseline;
+      gap: 12px;
+    }
+    .logo {
+      font-weight: bold;
+      font-size: 1.35rem;
+      letter-spacing: 3px;
+      text-shadow: 0 0 6px #ff0000;
+    }
+    .logo span {
+      color: #ff8888;
+    }
+    .nav-links a {
+      color: #aa2e2e;
+      text-decoration: none;
+      margin-left: 1.2rem;
+      font-size: 0.8rem;
+      text-transform: uppercase;
+      transition: 0.2s;
+    }
+    .nav-links a:hover {
+      color: #ff4d4d;
+      text-shadow: 0 0 4px red;
+    }
+
+    /* Hero / Cover + avatar centrado */
+    .hero-cover {
+      position: relative;
+      height: 190px;
+      background: linear-gradient(145deg, #1e0505, #2a0000);
+      overflow: hidden;
+    }
+    .cover-img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      opacity: 0.85;
+    }
+    /* si no hay imagen de portada, mostramos degradado */
+    .hero-cover.no-img {
+      background: linear-gradient(135deg, #2c0a0a, #130101);
+    }
+
+    .avatar-wrapper {
+      position: absolute;
+      bottom: -48px;
+      left: 50%;
+      transform: translateX(-50%);
+      z-index: 3;
+    }
+    .avatar {
+      width: 108px;
+      height: 108px;
+      border-radius: 50%;
+      border: 4px solid #ff0000;
+      background: #0a0000;
+      object-fit: cover;
+      box-shadow: 0 0 18px rgba(255, 0, 0, 0.6);
+    }
+
+    /* Información principal */
+    .info-central {
+      text-align: center;
+      margin-top: 68px;
+      padding: 0 20px 20px 20px;
+      border-bottom: 1px solid #3a1a1a;
+    }
+    .nombre-usuario {
+      font-size: 2rem;
+      font-weight: 700;
+      letter-spacing: 2px;
+      text-shadow: 0 0 8px #ff0000;
+      margin-bottom: 6px;
+    }
+    .handle {
+      color: #b55a5a;
+      font-size: 0.85rem;
+      letter-spacing: 1px;
+      margin-bottom: 18px;
+    }
+    .stats {
+      display: flex;
+      justify-content: center;
+      gap: 2.5rem;
+      margin: 18px 0 22px 0;
+    }
+    .stat-item {
+      text-align: center;
+    }
+    .stat-number {
+      font-size: 1.7rem;
+      font-weight: bold;
+      color: #ff6666;
+    }
+    .stat-label {
+      font-size: 0.7rem;
+      text-transform: uppercase;
+      color: #aa5555;
+    }
+
+    /* Botones de acción */
+    .acciones {
+      display: flex;
+      justify-content: center;
+      gap: 1.2rem;
+      flex-wrap: wrap;
+      margin-top: 8px;
+    }
+    .btn {
+      background: rgba(102, 0, 0, 0.5);
+      border: 1px solid #a12222;
+      padding: 8px 20px;
+      border-radius: 40px;
+      color: #ffbcbc;
+      font-family: monospace;
+      font-weight: bold;
+      cursor: pointer;
+      transition: 0.2s;
+      font-size: 0.8rem;
+      backdrop-filter: blur(4px);
+    }
+    .btn i {
+      margin-right: 6px;
+    }
+    .btn:hover {
+      background: #aa2222;
+      color: white;
+      border-color: #ff8888;
+      box-shadow: 0 0 12px #ff0000;
+      transform: scale(1.02);
+    }
+
+    /* Detalles del perfil (grid elegante) */
+    .detalles-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 14px;
+      padding: 24px 22px;
+      background: rgba(0, 0, 0, 0.3);
+    }
+    .card-detail {
+      background: #0f0303b3;
+      border-left: 4px solid #cc3333;
+      padding: 12px 16px;
+      border-radius: 12px;
+      backdrop-filter: blur(2px);
+    }
+    .detail-label {
+      font-size: 0.7rem;
+      text-transform: uppercase;
+      color: #dd7777;
+      letter-spacing: 2px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      margin-bottom: 8px;
+    }
+    .detail-text {
+      font-size: 0.9rem;
+      color: #f2c2c2;
+      word-break: break-word;
+      line-height: 1.4;
+    }
+    .social-icons {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 12px;
+      margin-top: 6px;
+    }
+    .social-icons a {
+      color: #cc7777;
+      font-size: 1.5rem;
+      transition: 0.2s;
+    }
+    .social-icons a:hover {
+      color: #ff3333;
+      transform: translateY(-3px);
+    }
+
+    /* Tabla de posts */
+    .posts-section {
+      padding: 10px 22px 28px 22px;
+    }
+    .posts-title {
+      font-size: 1.2rem;
+      margin-bottom: 16px;
+      border-left: 4px solid #ff3333;
+      padding-left: 14px;
+      text-transform: uppercase;
+      letter-spacing: 2px;
+    }
+    .tabla-posts {
+      width: 100%;
+      border-collapse: collapse;
+      background: #0b0101c9;
+      border-radius: 16px;
+      overflow: hidden;
+      box-shadow: 0 4px 14px rgba(0,0,0,0.4);
+    }
+    .tabla-posts th {
+      background: #2e0707;
+      color: #ffaaaa;
+      padding: 12px 8px;
+      font-weight: 600;
+      font-size: 0.75rem;
+      text-transform: uppercase;
+    }
+    .tabla-posts td {
+      padding: 12px 8px;
+      text-align: center;
+      border-bottom: 1px solid #441111;
+      color: #e4bebe;
+    }
+    .url-btn {
+      background: #661111;
+      border: none;
+      padding: 6px 14px;
+      border-radius: 30px;
+      color: #ffc6c6;
+      font-family: monospace;
+      font-weight: bold;
+      font-size: 0.7rem;
+      cursor: pointer;
+      transition: 0.2s;
+    }
+    .url-btn:hover {
+      background: #b32424;
+      box-shadow: 0 0 8px red;
+    }
+
+    /* pie / footer sutil */
+    .footer-note {
+      text-align: center;
+      font-size: 0.65rem;
+      color: #5e2e2e;
+      padding: 16px 20px 20px;
+      border-top: 1px solid #2f1515;
+    }
+
+    @media (max-width: 600px) {
+      .perfil-container {
+        border-radius: 20px;
+      }
+      .avatar {
+        width: 80px;
+        height: 80px;
+      }
+      .avatar-wrapper {
+        bottom: -36px;
+      }
+      .info-central {
+        margin-top: 50px;
+      }
+      .nombre-usuario {
+        font-size: 1.5rem;
+      }
+      .stats {
+        gap: 1.2rem;
+      }
+      .detalles-grid {
+        padding: 16px;
+      }
+    }
+  </style>
+</head>
+<body>
+
+<div class="perfil-container">
+  <!-- Cabecera idéntica al estilo JXLL -->
+  <div class="perfil-header">
+    <div class="logo">[ JXLL ]</div>
+    <div class="nav-links">
+      <a href="#"><i class="fa-solid fa-house"></i> Inicio</a>
+      <a href="#"><i class="fa-solid fa-code"></i> Dev</a>
+    </div>
+  </div>
+
+  <!-- Portada + avatar centrado -->
+  <div class="hero-cover" id="coverContainer">
+    <!-- si hubiera imagen real, se pondría, pero usamos fondo elegante -->
+    <div style="width:100%; height:100%; background: radial-gradient(circle at 20% 30%, #3a0808, #0f0000);"></div>
+  </div>
+  <div class="avatar-wrapper">
+    <img class="avatar" id="userAvatar" src="https://files.catbox.moe/10zywm.jpg" alt="avatar">
+  </div>
+
+  <!-- Información central (nombre, stats) -->
+  <div class="info-central">
+    <div class="nombre-usuario" id="displayName">BszTeam</div>
+    <div class="handle" id="userHandle">@BszTeam</div>
+    <div class="stats">
+      <div class="stat-item"><div class="stat-number" id="postsCount">3</div><div class="stat-label">POSTS</div></div>
+      <div class="stat-item"><div class="stat-number" id="followersCount">128</div><div class="stat-label">SEGUIDORES</div></div>
+      <div class="stat-item"><div class="stat-number" id="followingCount">94</div><div class="stat-label">SIGUIENDO</div></div>
+    </div>
+    <div class="acciones">
+      <button class="btn" id="editarPerfilBtn" disabled><i class="fa-regular fa-pen-to-square"></i> Editar perfil</button>
+      <button class="btn" id="seguirBtn" disabled><i class="fa-regular fa-bell"></i> Seguir</button>
+    </div>
+  </div>
+
+  <!-- Detalles personales: bio, género, ubicación, redes -->
+  <div class="detalles-grid">
+    <div class="card-detail">
+      <div class="detail-label"><i class="fa-regular fa-address-card"></i> BIOGRAFÍA</div>
+      <div class="detail-text" id="userBio">🔥 Apasionado por la ciberseguridad y el diseño oscuro. Team JXLL es mi esencia. 🔥</div>
+    </div>
+    <div class="card-detail">
+      <div class="detail-label"><i class="fa-solid fa-venus-mars"></i> GÉNERO</div>
+      <div class="detail-text" id="userGender">Masculino</div>
+    </div>
+    <div class="card-detail">
+      <div class="detail-label"><i class="fa-solid fa-location-dot"></i> UBICACIÓN</div>
+      <div class="detail-text" id="userLocation">🌍 CDMX / Ciberespacio</div>
+    </div>
+    <div class="card-detail">
+      <div class="detail-label"><i class="fa-regular fa-compass"></i> SITIO WEB</div>
+      <div class="detail-text" id="userWebsite"><a href="https://jxll.org" target="_blank" style="color:#ff7b7b;">https://jxll.org</a></div>
+    </div>
+    <div class="card-detail">
+      <div class="detail-label"><i class="fa-solid fa-hashtag"></i> ETIQUETAS</div>
+      <div class="detail-text" id="userTags">#Bsz #RedTeam #JXLL</div>
+    </div>
+    <div class="card-detail">
+      <div class="detail-label"><i class="fa-solid fa-share-nodes"></i> REDES SOCIALES</div>
+      <div class="social-icons" id="socialLinks">
+        <!-- los íconos se rellenarán desde js estático pero dejamos muestra realista -->
+        <a href="#" target="_blank"><i class="fab fa-instagram"></i></a>
+        <a href="#" target="_blank"><i class="fab fa-twitter"></i></a>
+        <a href="#" target="_blank"><i class="fab fa-github"></i></a>
+        <a href="#" target="_blank"><i class="fab fa-discord"></i></a>
+      </div>
+    </div>
+  </div>
+
+  <!-- SECCIÓN DE POSTS (estilo tabla) -->
+  <div class="posts-section">
+    <div class="posts-title"><i class="fa-regular fa-newspaper"></i> Últimos posts</div>
+    <table class="tabla-posts">
+      <thead>
+        <tr><th>TÍTULO</th><th>ENLACE</th></tr>
+      </thead>
+      <tbody id="postsTableBody">
+        <!-- Los posts se llenan con js estático de ejemplo -->
+      </tbody>
+    </table>
+  </div>
+
+  <div class="footer-note">
+    <i class="fa-regular fa-copyright"></i> TEAM JXLL · visualizador estático de perfil
+  </div>
+</div>
+
+<script>
+  // --------------------------------------------------------------
+  // VISUALIZADOR ESTÁTICO / SIMULACIÓN DE PERFIL (BszTeam)
+  // Toda la info está basada en el estilo de la web original
+  // Se puede reemplazar fácilmente con fetch real a la API
+  // --------------------------------------------------------------
+
+  // DATOS DEL USUARIO (simulados pero realistas, igual que la página real)
+  const userProfile = {
+    name: "BszTeam",
+    handle: "@BszTeam",
+    avatar: "https://files.catbox.moe/10zywm.jpg",   // misma imagen de ejemplo
+    cover: null,   // sin portada personalizada, se usa fondo por defecto
+    bio: "⚡ Hacker ético · Developer · Fundador de TEAM JXLL ⚡\n💀 Especialista en OSINT y hardening. Siempre al filo de la matrix.",
+    gender: "Masculino",
+    location: "México, CDMX · Zona .dark",
+    website: "https://jxll.org",
+    tags: "#Bsz #JXLL #CyberSecurity #Hacking",
+    followers: 128,
+    following: 94,
+    postsCount: 3,
+    social: {
+      instagram: "https://instagram.com/jxll_team",
+      twitter: "https://twitter.com/JXLL_Official",
+      github: "https://github.com/JXLL-ORG",
+      discord: "https://discord.gg/jxll",
+      youtube: "#",
+      tiktok: "#"
+    },
+    // posts recientes (simulados, con enlaces)
+    posts: [
+      { title: "Nuevo framework OSINT 🔍", url: "https://jxll.org/tools/osint-framework" },
+      { title: "Workshop: Seguridad en Redes", url: "https://jxll.org/workshops/redes" },
+      { title: "Lanzamiento de JXLL API v2", url: "https://jxll.org/dev/api-v2" }
+    ]
+  };
+
+  // ---------- FUNCIÓN PARA VOLCAR DATOS EN EL DOM ----------
+  function renderizarPerfil() {
+    // nombre y handle
+    document.getElementById('displayName').innerText = userProfile.name;
+    document.getElementById('userHandle').innerText = userProfile.handle;
+    // avatar
+    const avatarImg = document.querySelector('.avatar');
+    if (avatarImg) avatarImg.src = userProfile.avatar;
+    // stats
+    document.getElementById('postsCount').innerText = userProfile.postsCount;
+    document.getElementById('followersCount').innerText = userProfile.followers;
+    document.getElementById('followingCount').innerText = userProfile.following;
+    // biografía (soporta saltos de línea)
+    document.getElementById('userBio').innerHTML = userProfile.bio.replace(/\n/g, '<br>');
+    document.getElementById('userGender').innerText = userProfile.gender;
+    document.getElementById('userLocation').innerText = userProfile.location;
+    document.getElementById('userTags').innerText = userProfile.tags;
+    
+    // sitio web
+    const websiteLink = document.getElementById('userWebsite');
+    if (userProfile.website && userProfile.website !== "") {
+      websiteLink.innerHTML = `<a href="${userProfile.website}" target="_blank" style="color:#ff7b7b;">${userProfile.website}</a>`;
+    } else {
+      websiteLink.innerText = "No especificado";
+    }
+    
+    // REDES SOCIALES (íconos clickeables)
+    const socialContainer = document.getElementById('socialLinks');
+    socialContainer.innerHTML = "";
+    const socialMap = {
+      instagram: { icon: "fab fa-instagram", color: "#E1306C", baseUrl: "https://instagram.com/" },
+      twitter: { icon: "fab fa-twitter", color: "#1DA1F2", baseUrl: "https://twitter.com/" },
+      github: { icon: "fab fa-github", color: "#6e5494", baseUrl: "https://github.com/" },
+      discord: { icon: "fab fa-discord", color: "#5865F2", baseUrl: "" },
+      youtube: { icon: "fab fa-youtube", color: "#FF0000", baseUrl: "https://youtube.com/@" },
+      tiktok: { icon: "fab fa-tiktok", color: "#00f2ea", baseUrl: "https://tiktok.com/@" }
+    };
+    
+    for (const [key, value] of Object.entries(userProfile.social)) {
+      if (value && value !== "#" && value !== "") {
+        const socialInfo = socialMap[key];
+        if (socialInfo) {
+          let linkUrl = value;
+          // Si no es url completa y existe baseUrl, la construimos
+          if (!value.startsWith("http") && socialInfo.baseUrl) {
+            linkUrl = socialInfo.baseUrl + value.replace('@', '');
+          }
+          const anchor = document.createElement('a');
+          anchor.href = linkUrl;
+          anchor.target = "_blank";
+          anchor.rel = "noopener noreferrer";
+          anchor.style.color = socialInfo.color;
+          anchor.style.fontSize = "1.6rem";
+          anchor.style.marginRight = "8px";
+          anchor.innerHTML = `<i class="${socialInfo.icon}"></i>`;
+          socialContainer.appendChild(anchor);
+        }
+      }
+    }
+    // si no hay redes, mostrar placeholder
+    if (socialContainer.children.length === 0) {
+      socialContainer.innerHTML = '<span style="color:#996666;">Sin redes vinculadas</span>';
+    }
+    
+    // ----- RENDERIZAR TABLA DE POSTS -----
+    const tbody = document.getElementById('postsTableBody');
+    tbody.innerHTML = "";
+    if (userProfile.posts.length === 0) {
+      const emptyRow = document.createElement('tr');
+      emptyRow.innerHTML = '<td colspan="2" style="text-align:center; padding:24px;">📭 No hay posts recientes</td>';
+      tbody.appendChild(emptyRow);
+    } else {
+      userProfile.posts.forEach(post => {
+        const row = document.createElement('tr');
+        // Título
+        const tdTitle = document.createElement('td');
+        tdTitle.innerText = post.title;
+        tdTitle.style.fontWeight = "500";
+        // Enlace (botón)
+        const tdLink = document.createElement('td');
+        const btn = document.createElement('button');
+        btn.className = 'url-btn';
+        btn.innerHTML = '<i class="fa-regular fa-eye"></i> Ver URL';
+        btn.addEventListener('click', () => {
+          if (post.url && post.url !== "#") {
+            window.open(post.url, '_blank');
+          } else {
+            alert('Enlace de demostración (simulado)');
+          }
+        });
+        tdLink.appendChild(btn);
+        row.appendChild(tdTitle);
+        row.appendChild(tdLink);
+        tbody.appendChild(row);
+      });
+    }
+  }
+
+  // Si se deseara en un futuro consumir la API real, se podría hacer fetch y mapear
+  // pero como el objetivo es visualizador fijo con estilo "body", dejamos los datos mock.
+  // (además la web original carga dinámicamente, pero para este visualizador usamos datos estáticos creíbles)
+
+  // Ajuste opcional de portada (si se quisiera poner una imagen)
+  const coverDiv = document.querySelector('.hero-cover');
+  if (userProfile.cover) {
+    coverDiv.innerHTML = `<img class="cover-img" src="${userProfile.cover}" alt="cover">`;
+    coverDiv.classList.remove('no-img');
+  } else {
+    // mantenemos el fondo elegante
+    coverDiv.innerHTML = '<div style="width:100%; height:100%; background: radial-gradient(circle at 20% 30%, #3a0808, #0f0000);"></div>';
+  }
+
+  // Inicializar perfil
+  renderizarPerfil();
+
+  // Los botones Editar / Seguir están deshabilitados (solo visuales) porque es un visor estático.
+  // Se les puede dar una función informativa si se desea.
+  document.getElementById('editarPerfilBtn')?.addEventListener('click', () => alert('Modo visualizador · Edición disponible en el panel real.'));
+  document.getElementById('seguirBtn')?.addEventListener('click', () => alert('Seguimiento disponible en la plataforma JXLL.'));
+</script>
+</body>
+</html>
