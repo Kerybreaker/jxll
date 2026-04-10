@@ -96,7 +96,7 @@ body::before{
 
 .container-main{
   position:relative;z-index:1;
-  max-width:1200px;
+  max-width:1000px;
   margin:0 auto;
   padding:80px 20px 40px;
 }
@@ -111,72 +111,87 @@ body::before{
 }
 
 .profile-header-container{
-  position:relative;margin-bottom:0;overflow:visible;
+  position:relative;
+  margin-bottom:0;
+  overflow:visible;
 }
 .profile-cover{
-  width:100%;height:180px;object-fit:cover;display:block;
+  width:100%;
+  height:200px;
+  object-fit:cover;
+  display:block;
   background:linear-gradient(135deg,#0a0000 0%,#3a0000 100%);
   filter:brightness(0.7);
 }
 .profile-avatar-container{
   position: absolute;
-  bottom: -50px;
-  left: 30px;
+  bottom: -60px;
+  left: 50%;
+  transform: translateX(-50%);
   z-index: 999;
 }
-@media (max-width: 768px) {
-  .profile-avatar-container {
-    left: 50%;
-    transform: translateX(-50%);
-  }
-}
 .profile-avatar{
-  width:100px;height:100px;border-radius:50%;object-fit:cover;
-  border:3px solid #FF0000;background:var(--bg2);
-  box-shadow:0 0 14px rgba(255,0,0,0.4);
+  width:120px;
+  height:120px;
+  border-radius:50%;
+  object-fit:cover;
+  border:4px solid #FF0000;
+  background:var(--bg2);
+  box-shadow:0 0 20px rgba(255,0,0,0.5);
   z-index: 10;
 }
 .profile-info{
-  margin-top:50px;padding:0 24px 20px;
-  text-align:left;
-}
-@media (max-width: 768px) {
-  .profile-info {
-    text-align: center;
-    margin-top: 60px;
-  }
+  margin-top:70px;
+  padding:0 24px 20px;
+  text-align:center;
 }
 .profile-info h3{
-  color:#FF0000;font-size:1.5em;
-  border:none;padding:0;margin-bottom:8px;
+  color:#FF0000;
+  font-size:1.8em;
+  border:none;
+  padding:0;
+  margin-bottom:8px;
+  letter-spacing:2px;
 }
 .profile-info h3::after{display:none;}
-.profile-info p{font-size:0.85em;color:#8B0000;letter-spacing:2px;}
+.profile-info p{
+  font-size:0.9em;
+  color:#8B0000;
+  letter-spacing:3px;
+  margin-bottom:20px;
+}
 
 .profile-stats{
   display:flex;
   gap:20px;
-  margin-top:20px;
-  justify-content:flex-start;
+  margin-top:10px;
+  justify-content:center;
   flex-wrap: wrap;
 }
-@media (max-width: 768px) {
-  .profile-stats {
-    justify-content: center;
-  }
-}
 .stat{
-  text-align:center;background:var(--bg3);
-  border:1px solid var(--border);padding:12px 20px;
-  min-width:100px;
+  text-align:center;
+  background:var(--bg3);
+  border:1px solid var(--border);
+  padding:12px 25px;
+  min-width:110px;
   box-shadow:0 0 8px rgba(255,0,0,0.1);
   border-radius: 4px;
 }
-.stat .stat-value{font-size:1.5em;font-weight:bold;display:block;color:#FF0000;}
-.stat-label{font-size:10px;color:#8B0000;letter-spacing:1px;margin-top:5px;}
+.stat .stat-value{
+  font-size:1.8em;
+  font-weight:bold;
+  display:block;
+  color:#FF0000;
+}
+.stat-label{
+  font-size:11px;
+  color:#8B0000;
+  letter-spacing:1px;
+  margin-top:5px;
+}
 
 .profile-details{
-  margin-top:20px;
+  margin-top:30px;
   padding:0 24px;
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
@@ -191,15 +206,24 @@ body::before{
   border-radius: 4px;
 }
 .detail-label{
-  font-weight:bold;color:#8B0000;
-  margin-bottom:6px;display:flex;align-items:center;
-  font-size:0.78em;letter-spacing:1px;
+  font-weight:bold;
+  color:#8B0000;
+  margin-bottom:6px;
+  display:flex;
+  align-items:center;
+  font-size:0.78em;
+  letter-spacing:1px;
 }
-.detail-label::before{content:"▸";color:#FF0000;margin-right:6px;}
+.detail-label::before{
+  content:"▸";
+  color:#FF0000;
+  margin-right:6px;
+}
 .detail-value{
   color:var(--offwhite);
   font-size:0.85em;
   word-break:break-word;
+  line-height:1.4;
 }
 .detail-value a{
   color:#FF0000;
@@ -210,15 +234,10 @@ body::before{
 
 .social-links {
   display: flex;
-  gap: 15px;
+  gap: 12px;
   justify-content: flex-start;
-  margin-top: 15px;
+  margin-top: 8px;
   flex-wrap: wrap;
-}
-@media (max-width: 768px) {
-  .social-links {
-    justify-content: center;
-  }
 }
 .social-link {
   display: inline-flex;
@@ -226,11 +245,11 @@ body::before{
   gap: 8px;
   color: #8B0000;
   text-decoration: none;
-  padding: 8px 16px;
+  padding: 6px 14px;
   border: 1px solid var(--border);
   border-radius: 4px;
   transition: all 0.3s;
-  font-size: 0.8em;
+  font-size: 0.75em;
 }
 .social-link:hover {
   color: #FF0000;
@@ -238,17 +257,26 @@ body::before{
   transform: translateY(-2px);
 }
 .social-link i {
-  font-size: 1.1em;
+  font-size: 1em;
 }
 
 .profile-posts{
   margin-top:30px;
-  padding:0 24px 24px;
+  padding:0 24px 30px;
+}
+.profile-posts h3{
+  text-align: center;
+  margin-bottom: 20px;
+  font-size: 1.2em;
 }
 .posts-count{
-  background:rgba(139,0,0,0.2);padding:4px 12px;
-  display:inline-block;margin-left:10px;
-  font-size:0.75em;color:#FF0000;border:1px solid var(--border2);
+  background:rgba(139,0,0,0.2);
+  padding:4px 12px;
+  display:inline-block;
+  margin-left:10px;
+  font-size:0.75em;
+  color:#FF0000;
+  border:1px solid var(--border2);
   border-radius: 4px;
 }
 
@@ -256,7 +284,6 @@ body::before{
   width:100%;
   overflow-x:auto;
   -webkit-overflow-scrolling:touch;
-  margin-top:15px;
 }
 #tabla-posts-user{
   width:100%;
@@ -290,7 +317,7 @@ body::before{
   background:rgba(139,0,0,0.15);
   border:1px solid #8B0000;
   color:#FF0000;
-  padding:5px 12px;
+  padding:6px 14px;
   cursor:pointer;
   font-size:11px;
   font-family:inherit;
@@ -300,12 +327,14 @@ body::before{
 }
 .url-btn:hover{
   background:rgba(255,0,0,0.2);
-  box-shadow:0 0 6px rgba(255,0,0,0.3);
+  box-shadow:0 0 8px rgba(255,0,0,0.3);
   transform:scale(1.02);
 }
 
 .back-link {
-  display: inline-block;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
   margin-bottom: 20px;
   color: #8B0000;
   text-decoration: none;
@@ -313,29 +342,65 @@ body::before{
   border: 1px solid var(--border);
   border-radius: 4px;
   transition: all 0.3s;
+  font-size: 0.85em;
 }
 .back-link:hover {
   color: #FF0000;
   border-color: #FF0000;
+  transform: translateX(-3px);
 }
 
 .loading {
   text-align: center;
-  padding: 50px;
+  padding: 60px;
   color: #8B0000;
   font-size: 1.2em;
+}
+.loading i {
+  font-size: 2em;
+  margin-bottom: 15px;
+  display: block;
 }
 
 .error {
   text-align: center;
-  padding: 50px;
+  padding: 60px;
   color: #FF0000;
   font-size: 1.2em;
+}
+.error i {
+  font-size: 2.5em;
+  margin-bottom: 15px;
+  display: block;
 }
 
 @keyframes fadeIn{
   from{opacity:0;transform:translateY(20px);}
   to{opacity:1;transform:translateY(0);}
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .profile-avatar {
+    width: 90px;
+    height: 90px;
+  }
+  .profile-info h3 {
+    font-size: 1.4em;
+  }
+  .stat {
+    padding: 8px 15px;
+    min-width: 80px;
+  }
+  .stat .stat-value {
+    font-size: 1.4em;
+  }
+  .profile-details {
+    grid-template-columns: 1fr;
+  }
+  .social-links {
+    justify-content: center;
+  }
 }
 </style>
 </head>
@@ -355,11 +420,12 @@ body::before{
 </nav>
 
 <div class="container-main">
-  <a href="https://jxll.org/" class="back-link">← Volver al inicio</a>
+  <a href="https://jxll.org/" class="back-link"><i class="fas fa-arrow-left"></i> Volver al inicio</a>
   
   <div id="profileContainer">
     <div class="loading">
-      <i class="fas fa-spinner fa-spin"></i> Cargando perfil...
+      <i class="fas fa-spinner fa-spin"></i>
+      Cargando perfil...
     </div>
   </div>
 </div>
@@ -488,6 +554,9 @@ function showUserProfile(user) {
             console.error('Error cargando posts:', err);
         }
         
+        // Ordenar posts por fecha (más reciente primero)
+        userPosts.sort((a, b) => new Date(b.fecha) - new Date(a.fecha));
+        
         // Renderizar el HTML del perfil
         const avatarUrl = user.img && user.img !== 'null' ? sanitizeHTML(user.img) : 'https://files.catbox.moe/cqgdde.png';
         const coverUrl = user['url-portada'] && user['url-portada'] !== 'null' ? sanitizeHTML(user['url-portada']) : '';
@@ -495,16 +564,16 @@ function showUserProfile(user) {
         // Construir HTML de posts
         let postsHtml = '';
         if (userPosts.length === 0) {
-            postsHtml = '<tr><td colspan="2" style="text-align:center;color:#555;">Sin posts</td></tr>';
+            postsHtml = '<tr><td colspan="2" style="text-align:center;color:#555; padding:30px;">No hay posts disponibles</td></tr>';
         } else {
             userPosts.forEach(post => {
                 postsHtml += `
                     <tr>
-                        <td>${sanitizeHTML(post['post-titulo'])}</td>
+                        <td style="text-align:left; padding:12px;">${sanitizeHTML(post['post-titulo'])}</td>
                         <td>
                             ${post.shareLink && post.shareLink !== 'null' && post.shareLink !== '' ? 
-                                `<button class="url-btn" onclick="window.open('${sanitizeHTML(post.shareLink)}', '_blank')">Ver URL</button>` : 
-                                'N/A'}
+                                `<button class="url-btn" onclick="window.open('${sanitizeHTML(post.shareLink)}', '_blank')"><i class="fas fa-external-link-alt"></i> Ver URL</button>` : 
+                                '<span style="color:#555;">Sin URL</span>'}
                         </td>
                     </tr>
                 `;
@@ -520,34 +589,37 @@ function showUserProfile(user) {
         const profileHtml = `
             <div class="user-profile">
                 <div class="profile-header-container">
-                    ${coverUrl ? `<img src="${coverUrl}" alt="Portada" class="profile-cover">` : '<div class="profile-cover" style="background:linear-gradient(135deg,#0a0000 0%,#3a0000 100%);"></div>'}
+                    ${coverUrl ? `<img src="${coverUrl}" alt="Portada" class="profile-cover" onerror="this.style.display='none'; this.parentElement.style.background='linear-gradient(135deg,#0a0000 0%,#3a0000 100%)'">` : '<div class="profile-cover" style="background:linear-gradient(135deg,#0a0000 0%,#3a0000 100%);"></div>'}
                     <div class="profile-avatar-container">
-                        <img src="${avatarUrl}" class="profile-avatar" alt="Avatar">
+                        <img src="${avatarUrl}" class="profile-avatar" alt="Avatar" onerror="this.src='https://files.catbox.moe/cqgdde.png'">
                     </div>
                 </div>
                 <div class="profile-info">
                     <h3>${sanitizeHTML(user.name)}</h3>
-                    <p>TEAM JXLL</p>
+                    <p>✦ TEAM JXLL ✦</p>
                     <div class="profile-stats">
-                        <div class="stat"><span class="stat-value">${userPosts.length}</span><div class="stat-label">Posts</div></div>
-                        <div class="stat"><span class="stat-value">${user.seguidores || 0}</span><div class="stat-label">Seguidores</div></div>
-                        <div class="stat"><span class="stat-value">${user.seguidos || 0}</span><div class="stat-label">Seguidos</div></div>
+                        <div class="stat"><span class="stat-value">${userPosts.length}</span><div class="stat-label">POSTS</div></div>
+                        <div class="stat"><span class="stat-value">${user.seguidores || 0}</span><div class="stat-label">SEGUIDORES</div></div>
+                        <div class="stat"><span class="stat-value">${user.seguidos || 0}</span><div class="stat-label">SEGUIDOS</div></div>
                     </div>
                 </div>
                 <div class="profile-details">
-                    <div class="detail-item"><span class="detail-label">Descripción</span><span class="detail-value">${formatDescription(user.descripcionuser)}</span></div>
-                    <div class="detail-item"><span class="detail-label">Etiquetas</span><span class="detail-value">${sanitizeHTML(user.etiquetasuser) || '#Bsz'}</span></div>
-                    <div class="detail-item"><span class="detail-label">Género</span><span class="detail-value">${(user.gender && user.gender !== 'null') ? sanitizeHTML(user.gender) : '—'}</span></div>
-                    <div class="detail-item"><span class="detail-label">Ubicación</span><span class="detail-value">${(user.location && user.location !== 'null') ? sanitizeHTML(user.location) : '—'}</span></div>
-                    <div class="detail-item"><span class="detail-label">Sitio Web</span><span class="detail-value">${websiteHtml}</span></div>
-                    ${socialHtml ? `<div class="detail-item"><span class="detail-label">Redes Sociales</span><span class="detail-value">${socialHtml}</span></div>` : ''}
+                    <div class="detail-item"><span class="detail-label">DESCRIPCIÓN</span><span class="detail-value">${formatDescription(user.descripcionuser)}</span></div>
+                    <div class="detail-item"><span class="detail-label">ETIQUETAS</span><span class="detail-value">${sanitizeHTML(user.etiquetasuser) || '#Bsz'}</span></div>
+                    <div class="detail-item"><span class="detail-label">GÉNERO</span><span class="detail-value">${(user.gender && user.gender !== 'null') ? sanitizeHTML(user.gender) : '—'}</span></div>
+                    <div class="detail-item"><span class="detail-label">UBICACIÓN</span><span class="detail-value">${(user.location && user.location !== 'null') ? sanitizeHTML(user.location) : '—'}</span></div>
+                    <div class="detail-item"><span class="detail-label">SITIO WEB</span><span class="detail-value">${websiteHtml}</span></div>
+                    ${socialHtml ? `<div class="detail-item"><span class="detail-label">REDES SOCIALES</span><span class="detail-value">${socialHtml}</span></div>` : ''}
                 </div>
                 <div class="profile-posts">
-                    <h3>Posts <span class="posts-count">${userPosts.length}</span></h3>
+                    <h3><i class="fas fa-pen-alt"></i> PUBLICACIONES <span class="posts-count">${userPosts.length}</span></h3>
                     <div class="table-wrapper">
                         <table id="tabla-posts-user">
                             <thead>
-                                <tr><th>Título</th><th>URL</th></tr>
+                                <tr>
+                                    <th>TÍTULO</th>
+                                    <th>ENLACE</th>
+                                </tr>
                             </thead>
                             <tbody>
                                 ${postsHtml}
@@ -594,9 +666,9 @@ async function cargarPerfil() {
     if (!userName) {
         container.innerHTML = `
             <div class="error">
-                <i class="fas fa-exclamation-triangle"></i><br>
+                <i class="fas fa-exclamation-triangle"></i>
                 No se especificó ningún usuario.<br>
-                Usa el formato: ?user=nombreusuario
+                <span style="font-size:0.8em;">Usa el formato: ?user=nombreusuario</span>
             </div>
         `;
         return;
@@ -609,7 +681,7 @@ async function cargarPerfil() {
     if (!user) {
         container.innerHTML = `
             <div class="error">
-                <i class="fas fa-user-slash"></i><br>
+                <i class="fas fa-user-slash"></i>
                 Usuario "${sanitizeHTML(userName)}" no encontrado.
             </div>
         `;
