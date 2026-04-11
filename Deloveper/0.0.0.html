@@ -1,10 +1,19 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
+  <script>
+  document.addEventListener('keydown', function(e) {
+    // Detecta Ctrl + U
+    if (e.ctrlKey && e.key.toLowerCase() === 'u') {
+      e.preventDefault(); // Evita que se abra el código fuente
+      window.location.href = "perfil.html"; // Cambia por tu link
+    }
+  });
+</script>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
-<title>TEAM JXLL — Perfil BszTeam | Developer</title>
+<title>TEAM JXLL — BszTeam | Developer</title>
 <link rel="icon" type="image/png" href="favicon.png">
 <style>
 @import url('https://fonts.googleapis.com/css2?family=Share+Tech+Mono&display=swap');
@@ -154,26 +163,20 @@ body::before{
   letter-spacing:2px;
 }
 .profile-info h3::after{display:none;}
+.profile-info .role{
+  font-size:0.85em;
+  color:#FF4444;
+  letter-spacing:3px;
+  margin-bottom:20px;
+  text-transform:uppercase;
+  font-weight:bold;
+  text-shadow:0 0 5px rgba(255,0,0,0.5);
+}
 .profile-info p{
   font-size:0.9em;
   color:#8B0000;
   letter-spacing:3px;
   margin-bottom:20px;
-}
-.developer-badge {
-  display: inline-block;
-  background: #000;
-  border: 1px solid #FF0000;
-  color: #FF0000;
-  padding: 4px 12px;
-  border-radius: 20px;
-  font-size: 0.7em;
-  letter-spacing: 1px;
-  margin-top: 8px;
-  box-shadow: 0 0 8px rgba(255,0,0,0.3);
-}
-.developer-badge i {
-  margin-right: 6px;
 }
 
 .profile-stats{
@@ -394,6 +397,7 @@ body::before{
   to{opacity:1;transform:translateY(0);}
 }
 
+/* Responsive */
 @media (max-width: 768px) {
   .profile-avatar {
     width: 90px;
@@ -439,27 +443,27 @@ body::before{
   <div id="profileContainer">
     <div class="loading">
       <i class="fas fa-spinner fa-spin"></i>
-      Cargando perfil de BszTeam...
+      Cargando perfil...
     </div>
   </div>
 </div>
 
 <script>
 // ========== CONFIGURACIÓN ==========
-// USUARIO FIJO: BszTeam (no se obtiene de la URL)
-const FIXED_USERNAME = 'BszTeam';
-
 const MOCKAPI_USERS_URL = 'https://69d75f459c5ebb0918c77973.mockapi.io/jxxl/dox/1809284927309381080812098492848102984098120840921/92019301920390129039120/Bsz/User';
 const MOCKAPI_POSTS_URL = 'https://69d75f459c5ebb0918c77973.mockapi.io/jxxl/dox/1809284927309381080812098492848102984098120840921/92019301920390129039120/Bsz/post';
+
+// USUARIO FIJO (ignora el parámetro de URL)
+const USUARIO_FIJO = 'BszTeam';
 
 // ========== SANITIZACIÓN ==========
 function sanitizeHTML(str) {
     if (!str) return '';
-    return str.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;').replace(/'/g, '&#039;');
+    return str.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;').replace(/'/g, '&#39;');
 }
 
 function formatDescription(text) {
-    if (!text || text === 'null') return 'Sin descripción';
+    if (!text || text === 'null') return 'Desarrollador Full Stack apasionado por la tecnología y la innovación.';
     let sanitized = sanitizeHTML(text);
     let formatted = sanitized.replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>');
     formatted = formatted.replace(/\n/g, '<br>');
@@ -539,7 +543,7 @@ function renderSocialLinks(social) {
     return hasAnySocial ? html : '';
 }
 
-// ========== MOSTRAR PERFIL ==========
+// ========== MOSTRAR PERFIL (con usuario fijo) ==========
 function showUserProfile(user) {
     const container = document.getElementById('profileContainer');
     if (!container) return;
@@ -597,6 +601,9 @@ function showUserProfile(user) {
             `<a href="${user.social.website.startsWith('http') ? sanitizeHTML(user.social.website) : 'https://' + sanitizeHTML(user.social.website)}" target="_blank" rel="noopener noreferrer" style="color:#FF0000; text-decoration:underline;">${sanitizeHTML(user.social.website)}</a>` :
             '—';
         
+        // Descripción personalizada para mostrar "Developer"
+        const displayDescription = user.descripcionuser && user.descripcionuser !== 'null' ? user.descripcionuser : '⚡ Desarrollador Full Stack | Especialista en JavaScript, HTML, CSS y tecnologías modernas. Creando experiencias digitales únicas.';
+        
         const profileHtml = `
             <div class="user-profile">
                 <div class="profile-header-container">
@@ -607,10 +614,7 @@ function showUserProfile(user) {
                 </div>
                 <div class="profile-info">
                     <h3>${sanitizeHTML(user.name)}</h3>
-                    <p>✦ TEAM JXLL ✦</p>
-                    <div class="developer-badge">
-                        <i class="fas fa-code"></i> DEVELOPER
-                    </div>
+                    <div class="role">✦ DEVELOPER ✦</div>
                     <div class="profile-stats">
                         <div class="stat"><span class="stat-value">${userPosts.length}</span><div class="stat-label">POSTS</div></div>
                         <div class="stat"><span class="stat-value">${user.seguidores || 0}</span><div class="stat-label">SEGUIDORES</div></div>
@@ -618,8 +622,8 @@ function showUserProfile(user) {
                     </div>
                 </div>
                 <div class="profile-details">
-                    <div class="detail-item"><span class="detail-label">DESCRIPCIÓN</span><span class="detail-value">${formatDescription(user.descripcionuser)}</span></div>
-                    <div class="detail-item"><span class="detail-label">ETIQUETAS</span><span class="detail-value">${sanitizeHTML(user.etiquetasuser) || '#Bsz'}</span></div>
+                    <div class="detail-item"><span class="detail-label">DESCRIPCIÓN</span><span class="detail-value">${formatDescription(displayDescription)}</span></div>
+                    <div class="detail-item"><span class="detail-label">ETIQUETAS</span><span class="detail-value">${sanitizeHTML(user.etiquetasuser) || '#Developer #BszTeam'}</span></div>
                     <div class="detail-item"><span class="detail-label">GÉNERO</span><span class="detail-value">${(user.gender && user.gender !== 'null') ? sanitizeHTML(user.gender) : '—'}</span></div>
                     <div class="detail-item"><span class="detail-label">UBICACIÓN</span><span class="detail-value">${(user.location && user.location !== 'null') ? sanitizeHTML(user.location) : '—'}</span></div>
                     <div class="detail-item"><span class="detail-label">SITIO WEB</span><span class="detail-value">${websiteHtml}</span></div>
@@ -650,14 +654,14 @@ function showUserProfile(user) {
     renderProfileWithPosts();
 }
 
-// ========== BUSCAR USUARIO FIJO ==========
-async function buscarUsuarioFijo() {
+// ========== BUSCAR USUARIO POR NOMBRE ==========
+async function buscarUsuarioPorNombre(nombre) {
     try {
         const response = await fetch(MOCKAPI_USERS_URL);
         const users = await response.json();
         console.log('Usuarios encontrados:', users.map(u => u.name));
         
-        const userFound = users.find(u => u.name.toLowerCase() === FIXED_USERNAME.toLowerCase());
+        const userFound = users.find(u => u.name.toLowerCase() === nombre.toLowerCase());
         return userFound;
     } catch (error) {
         console.error('Error al buscar usuario:', error);
@@ -665,19 +669,19 @@ async function buscarUsuarioFijo() {
     }
 }
 
-// ========== CARGAR PERFIL FIJO ==========
+// ========== CARGAR PERFIL CON USUARIO FIJO ==========
 async function cargarPerfil() {
     const container = document.getElementById('profileContainer');
     
-    console.log('Cargando perfil fijo de usuario:', FIXED_USERNAME);
+    console.log('Cargando usuario fijo:', USUARIO_FIJO);
     
-    const user = await buscarUsuarioFijo();
+    const user = await buscarUsuarioPorNombre(USUARIO_FIJO);
     
     if (!user) {
         container.innerHTML = `
             <div class="error">
                 <i class="fas fa-user-slash"></i>
-                Usuario "${sanitizeHTML(FIXED_USERNAME)}" no encontrado en la base de datos.
+                Usuario "${sanitizeHTML(USUARIO_FIJO)}" no encontrado en la base de datos.
             </div>
         `;
         return;
